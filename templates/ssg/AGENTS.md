@@ -24,6 +24,11 @@
 
 `typecheck`는 `tsc`가 아니라 `astro check`다 — `.astro` 파일은 tsc가 못 읽는다.
 
+AI 에이전트 터미널(Claude Code 등)에서 `bun run dev`를 돌리면 Astro가 그 환경을 감지해서
+`astro dev`를 백그라운드 데몬으로 띄운다 — 명령이 바로 리턴되고 pid만 찍힌다. 버그 아니다.
+`bunx astro dev logs --follow`로 로그, `bunx astro dev stop`으로 종료. 이 감지가
+`bun run test:e2e`도 건드려서 §7에 별도로 적어뒀다.
+
 ### 생성물은 손대지 않는다
 
 `src/api/`, `src/@types/`는 생성물이고 **커밋되어 있다**.
