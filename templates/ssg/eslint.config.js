@@ -18,4 +18,10 @@ export default [
       'import/no-default-export': 'off',
     },
   },
+  {
+    // `_islands/`의 언더스코어는 손으로 지은 이름이 아니라 Astro 라우터 관례다 —
+    // 접두사가 없으면 "Unsupported file type in pages directory" 경고가 뜬다.
+    files: ['src/pages/_islands/**'],
+    rules: { 'check-file/folder-naming-convention': 'off' },
+  },
 ];

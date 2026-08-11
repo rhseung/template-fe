@@ -129,7 +129,7 @@ function Home() {
   ssg: {
     remove: [
       'src/features/todos',
-      'src/islands/todos-island.tsx',
+      'src/pages/_islands/todos-island.tsx',
       'src/locales/ko/todos.json',
       'src/locales/en/todos.json',
       'e2e/todos.spec.ts',

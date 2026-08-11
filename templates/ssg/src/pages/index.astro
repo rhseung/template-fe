@@ -1,7 +1,8 @@
 ---
-// 페이지는 마운트 포인트다. `src/islands/`가 Provider+View를 하나로 합친 하이드레이션
-// 경계이고, 페이지는 그 아일랜드 하나에만 `client:load`를 건다.
-import { TodosIsland } from '@/islands/todos-island';
+// 페이지는 마운트 포인트다. `_islands/`가 Provider+View를 하나로 합친 하이드레이션
+// 경계이고, 페이지는 그 아일랜드 하나에만 `client:load`를 건다. 언더스코어 접두사는
+// Astro 라우터가 이 폴더를 라우트로 취급하지 않게 하는 관례(파일이 .astro가 아니라서).
+import { TodosIsland } from '@/pages/_islands/todos-island';
 import Layout from '@/layouts/base-layout.astro';
 ---
 

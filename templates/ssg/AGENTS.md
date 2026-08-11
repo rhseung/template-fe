@@ -50,8 +50,11 @@ src/
 │   └── views/
 │       ├── components/        #     props만 받는 표현 컴포넌트
 │       └── pages/             #     ViewModel을 호출하는 화면 전체 프레임
-├── islands/                   # 페이지가 마운트하는 하이드레이션 경계 하나
-├── layouts/, pages/           # Astro. 라우팅 + 정적 셸. UI 텍스트는 여기 없다.
+├── layouts/                    # Astro. 정적 셸(<head>, 공통 마크업). UI 텍스트는 여기 없다.
+├── pages/
+│   ├── _islands/               #   페이지가 마운트하는 하이드레이션 경계 하나.
+│   │                           #   `_` 접두사는 Astro 라우터가 라우트로 안 보게 하는 관례
+│   ├── index.astro, 404.astro  #   라우팅 + 아일랜드 마운트
 ├── locales/{ko,en}/           # i18next-cli 생성
 └── mocks/                     # MSW. dev·Storybook·vitest·Playwright 공유
 ```
@@ -63,7 +66,7 @@ src/
 | Model        | 도메인 타입·zod. 로직 없음.          | `@/api/zod.gen`, `@/api/types.gen` |
 | ViewModel    | 페치·뮤테이션·무효화·클라이언트 상태 | `@/api/@tanstack/react-query.gen`  |
 | View         | UI                                   | **없음** — ViewModel 훅만          |
-| Page(.astro) | feature page 마운트                  | feature 배럴 + `src/islands/`만    |
+| Page(.astro) | feature page 마운트                  | feature 배럴 + `pages/_islands/`만 |
 
 한 방향이다. View↛Model, ViewModel↛View, Model↛상위.
 `eslint-plugin-boundaries`가 한국어 메시지로 막는다.
@@ -71,15 +74,20 @@ src/
 **View가 Model 타입이 필요하면** ViewModel 배럴이 재export한다 (`viewmodels/index.ts`).
 이게 정식 경로다. `views/`에서 `../models`를 직접 import하면 린트 에러다.
 
-### 왜 `.astro`가 아니라 `src/islands/`가 마운트를 하나로 묶나
+### 왜 `.astro`가 아니라 `pages/_islands/`가 마운트를 하나로 묶나
 
 `<AppProviders client:load><TodosPage /></AppProviders>`처럼 `.astro` 템플릿에서
 프레임워크 컴포넌트를 직접 중첩하면, Astro가 자식을 별도 렌더 패스로 처리해서
 `QueryClientProvider` 같은 React context가 안 이어진다(`No QueryClient set` 빌드 에러).
 
-그래서 Provider와 View를 `src/islands/*.tsx`에서 순수 React 트리 하나로 미리 합치고,
+그래서 Provider와 View를 `pages/_islands/*.tsx`에서 순수 React 트리 하나로 미리 합치고,
 `.astro`는 그 컴포넌트 하나에만 `client:load`를 건다. 새 페이지를 추가할 때도 같은 패턴 —
 `.astro`가 프레임워크 컴포넌트를 두 개 이상 중첩하면 의심한다.
+
+`_islands/`가 `pages/` 바깥이 아니라 안에 있는 이유: 아일랜드는 항상 페이지 하나에 딸린
+라우팅 글루라서, `common/`·`features/`처럼 독립된 도메인 코드와 나란히 두면 오히려
+관계가 안 보인다. `_` 접두사가 없으면 Astro가 "Unsupported file type in pages directory"
+경고를 낸다 — 파일을 옮기라는 게 아니라 라우팅 대상이 아님을 표시하라는 뜻이다.
 
 ### Storybook은 Astro를 모른다
 
@@ -112,7 +120,7 @@ Vite + React + Tailwind만으로 그대로 돌아간다(루트 `vite.config.ts`�
 - `views/components/todo-list/` — props만 받음. `namespace Props`, `tv()`, dayjs
 - `views/components/todo-form/` — TanStack Form + ViewModel이 넘겨준 zod 스키마
 - `views/pages/todos-page.tsx` — 두 ViewModel 호출 + 화면 전체 조립
-- `islands/todos-island.tsx` — `AppProviders` + `TodosPage` 합본, 4줄
+- `pages/_islands/todos-island.tsx` — `AppProviders` + `TodosPage` 합본, 4줄
 - `pages/index.astro` — 그 아일랜드 하나에 `client:load`
 
 ## 3. 새 기능 추가 절차
@@ -124,7 +132,7 @@ Vite + React + Tailwind만으로 그대로 돌아간다(루트 `vite.config.ts`�
 3. `viewmodels/use-<name>.ts` — 쿼리/뮤테이션. **invalidate는 여기서 손으로 쓴다** (코드젠이 안 넣어준다)
 4. `src/locales/{ko,en}/<name>.json` 생성
 5. `src/common/lib/i18n.ts`의 `I18N_NAMESPACES`와 `resources`에 등록
-6. `src/islands/<name>-island.tsx` — `AppProviders` + feature page 합본
+6. `src/pages/_islands/<name>-island.tsx` — `AppProviders` + feature page 합본
 7. `src/pages/<name>.astro` — 그 아일랜드 하나만 `client:load`로 마운트
 8. `bun run gen && bun run check`
 
@@ -272,7 +280,7 @@ CI는 `bun run gen` 후 `git diff --exit-code`로 JSON이 최신인지 검증한
 `bun run init`에서 이미 물어봤다면 끝났다. 나중에 지우려면:
 
 ```sh
-rm -rf src/features/todos src/islands/todos-island.tsx src/locales/*/todos.json \
+rm -rf src/features/todos src/pages/_islands/todos-island.tsx src/locales/*/todos.json \
        e2e/todos.spec.ts openapi/example.json
 ```
 

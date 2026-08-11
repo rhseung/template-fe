@@ -45,8 +45,9 @@ src/
 │   ├── models/          #   생성된 타입·zod를 도메인 이름으로 재export
 │   ├── viewmodels/      #   훅. 쿼리·뮤테이션·클라이언트 상태
 │   └── views/            #   components/ (props만 받음) + pages/ (VM 호출, 화면 전체)
-├── islands/            # 페이지가 마운트하는 하이드레이션 경계 하나(Provider+View 합본)
-├── layouts/, pages/     # Astro. 라우팅 + 정적 셸만 — UI 텍스트는 여기 없다
+├── layouts/             # Astro. 정적 셸만 — UI 텍스트는 여기 없다
+├── pages/               # Astro. 라우팅.
+│   └── _islands/        #   페이지가 마운트하는 하이드레이션 경계(Provider+View 합본)
 ├── locales/{ko,en}/    # i18next-cli 생성. 손으로 키를 만들지 않는다.
 └── mocks/               # MSW. dev·Storybook·vitest·Playwright가 공유.
 ```
@@ -65,7 +66,7 @@ src/
 `bun run init`에서 "예제 유지?"에 `n`을 답하면 자동으로 지워진다. 나중에 지우려면:
 
 ```sh
-rm -rf src/features/todos src/islands/todos-island.tsx src/locales/*/todos.json \
+rm -rf src/features/todos src/pages/_islands/todos-island.tsx src/locales/*/todos.json \
        e2e/todos.spec.ts openapi/example.json
 ```
 
