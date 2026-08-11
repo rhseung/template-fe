@@ -4,7 +4,7 @@
     "toggleTheme": "Toggle theme"
   },
   "app": {
-    "name": "template-fe / csr"
+    "name": "template-fe / ssg"
   },
   "notFound": {
     "action": "Back to home",
