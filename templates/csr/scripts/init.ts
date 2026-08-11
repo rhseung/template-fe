@@ -39,6 +39,117 @@ const DELTA: Record<string, Record<Target, Delta>> = {
     },
     none: {},
   },
+  ssg: {
+    // CSR과 마찬가지로 결과물이 정적 파일뿐이라 별도 어댑터 패키지가 없다 —
+    // wrangler/vercel CLI가 `dist/`를 그대로 서빙한다.
+    cloudflare: {
+      dev: { wrangler: '4.120.0' },
+      scripts: { deploy: 'bun run build && wrangler deploy' },
+      keep: ['wrangler.jsonc'],
+    },
+    vercel: {
+      scripts: { deploy: 'vercel deploy --prod' },
+      keep: ['vercel.json'],
+    },
+    none: {},
+  },
+};
+
+/** 템플릿마다 다른 예제(todos) 삭제 절차. 파일 경로는 다르지만 스텁 내용은 공유한다. */
+const I18N_STUB_NO_EXAMPLE = `import i18next from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+import commonEn from '@/locales/en/common.json';
+import commonKo from '@/locales/ko/common.json';
+
+import { detectLanguage } from './languages';
+
+/** feature 하나당 네임스페이스 하나, 거기에 \`common\`. feature를 추가하면 여기에 이름을 넣는다. */
+export const I18N_NAMESPACES = ['common'] as const;
+
+export type I18nNamespace = (typeof I18N_NAMESPACES)[number];
+
+void i18next.use(initReactI18next).init({
+  resources: {
+    ko: { common: commonKo },
+    en: { common: commonEn },
+  },
+  lng: detectLanguage(),
+  fallbackLng: 'ko',
+  defaultNS: 'common',
+  ns: [...I18N_NAMESPACES],
+  nsSeparator: ':',
+  keySeparator: '.',
+  interpolation: { escapeValue: false },
+});
+
+export const i18n = i18next;
+`;
+
+const MOCKS_STUB_NO_EXAMPLE = `import type { RequestHandler } from 'msw';
+
+/**
+ * 목 데이터의 단일 원천. dev, Storybook, vitest 브라우저 프로젝트, Playwright가
+ * 모두 이 핸들러를 읽는다. 픽스처는 한 번만 쓰면 된다.
+ */
+export const handlers: RequestHandler[] = [];
+`;
+
+type ExampleCleanup = { remove: string[]; write: Record<string, string> };
+
+const EXAMPLE_CLEANUP: Record<string, ExampleCleanup> = {
+  csr: {
+    remove: [
+      'src/features/todos',
+      'src/routes/todos.tsx',
+      'src/locales/ko/todos.json',
+      'src/locales/en/todos.json',
+      'e2e/todos.spec.ts',
+      'openapi/example.json',
+    ],
+    write: {
+      'src/common/lib/i18n.ts': I18N_STUB_NO_EXAMPLE,
+      'src/mocks/handlers.ts': MOCKS_STUB_NO_EXAMPLE,
+      'src/routes/index.tsx': `import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/')({
+  component: Home,
+});
+
+function Home() {
+  return (
+    <main className="flex min-h-dvh items-center justify-center">
+      <h1 className="text-2xl font-semibold tracking-tight">Hello</h1>
+    </main>
+  );
+}
+`,
+    },
+  },
+  ssg: {
+    remove: [
+      'src/features/todos',
+      'src/islands/todos-island.tsx',
+      'src/locales/ko/todos.json',
+      'src/locales/en/todos.json',
+      'e2e/todos.spec.ts',
+      'openapi/example.json',
+    ],
+    write: {
+      'src/common/lib/i18n.ts': I18N_STUB_NO_EXAMPLE,
+      'src/mocks/handlers.ts': MOCKS_STUB_NO_EXAMPLE,
+      'src/pages/index.astro': `---
+import Layout from '@/layouts/base-layout.astro';
+---
+
+<Layout title="ssg">
+  <main class="flex min-h-dvh items-center justify-center">
+    <h1 class="text-2xl font-semibold tracking-tight">Hello</h1>
+  </main>
+</Layout>
+`,
+    },
+  },
 };
 
 const TARGET_FILES = ['wrangler.jsonc', 'vercel.json', 'open-next.config.ts', 'public/_headers'];
@@ -124,85 +235,19 @@ const body = (readme.split('<!-- template -->')[1] ?? '').trim();
 // 첫인상으로는 최악이다.
 await Bun.write('README.md', `# ${name}\n\n${body}\n`);
 
-// 5 — 예제 feature. 디렉토리만 지우면 안 된다. 이걸 가리키는 파일이 셋 있어서,
+// 5 — 예제 feature. 디렉토리만 지우면 안 된다. 이걸 가리키는 파일이 몇 개 있어서,
 // 그대로 두면 한 줄도 쓰기 전에 `typecheck`가 깨진 프로젝트를 받게 된다.
 // 원본에 정규식 수술을 하는 대신 알려진 상태의 스텁으로 다시 쓴다.
 if (!keepExample) {
-  await Promise.all(
-    [
-      'src/features/todos',
-      'src/routes/todos.tsx',
-      'src/locales/ko/todos.json',
-      'src/locales/en/todos.json',
-      'e2e/todos.spec.ts',
-      'openapi/example.json',
-    ].map((path) => rm(path, { recursive: true, force: true })),
-  );
+  const cleanup = EXAMPLE_CLEANUP[template];
+  if (cleanup) {
+    await Promise.all(cleanup.remove.map((path) => rm(path, { recursive: true, force: true })));
+    for (const [path, content] of Object.entries(cleanup.write)) {
+      await Bun.write(path, content);
+    }
+  }
 
-  await Bun.write(
-    'src/common/lib/i18n.ts',
-    `import i18next from 'i18next';
-import { initReactI18next } from 'react-i18next';
-
-import commonEn from '@/locales/en/common.json';
-import commonKo from '@/locales/ko/common.json';
-
-import { detectLanguage } from './languages';
-
-/** feature 하나당 네임스페이스 하나, 거기에 \`common\`. feature를 추가하면 여기에 이름을 넣는다. */
-export const I18N_NAMESPACES = ['common'] as const;
-
-export type I18nNamespace = (typeof I18N_NAMESPACES)[number];
-
-void i18next.use(initReactI18next).init({
-  resources: {
-    ko: { common: commonKo },
-    en: { common: commonEn },
-  },
-  lng: detectLanguage(),
-  fallbackLng: 'ko',
-  defaultNS: 'common',
-  ns: [...I18N_NAMESPACES],
-  nsSeparator: ':',
-  keySeparator: '.',
-  interpolation: { escapeValue: false },
-});
-
-export const i18n = i18next;
-`,
-  );
-
-  await Bun.write(
-    'src/mocks/handlers.ts',
-    `import type { RequestHandler } from 'msw';
-
-/**
- * 목 데이터의 단일 원천. dev, Storybook, vitest 브라우저 프로젝트, Playwright가
- * 모두 이 핸들러를 읽는다. 픽스처는 한 번만 쓰면 된다.
- */
-export const handlers: RequestHandler[] = [];
-`,
-  );
-
-  await Bun.write(
-    'src/routes/index.tsx',
-    `import { createFileRoute } from '@tanstack/react-router';
-
-export const Route = createFileRoute('/')({
-  component: Home,
-});
-
-function Home() {
-  return (
-    <main className="flex min-h-dvh items-center justify-center">
-      <h1 className="text-2xl font-semibold tracking-tight">Hello</h1>
-    </main>
-  );
-}
-`,
-  );
-
-  console.log('\n  예제(todos) 삭제됨. i18n·mocks·index 라우트는 자동으로 정리했다.');
+  console.log('\n  예제(todos) 삭제됨. i18n·mocks·진입점은 자동으로 정리했다.');
   console.log('  남은 건 하나 — .env 의 OPENAPI_INPUT 을 실제 백엔드로.');
 }
 
@@ -210,7 +255,12 @@ function Home() {
 await Bun.write(
   '.template-fe.json',
   `${JSON.stringify(
-    { template, target, name, createdAt: new Date().toISOString().slice(0, 10) },
+    {
+      template,
+      target,
+      name,
+      createdAt: new Date().toISOString().slice(0, 10),
+    },
     null,
     2,
   )}\n`,

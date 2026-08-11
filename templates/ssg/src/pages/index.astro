@@ -1,0 +1,10 @@
+---
+// 페이지는 마운트 포인트다. `src/islands/`가 Provider+View를 하나로 합친 하이드레이션
+// 경계이고, 페이지는 그 아일랜드 하나에만 `client:load`를 건다.
+import { TodosIsland } from '@/islands/todos-island';
+import Layout from '@/layouts/base-layout.astro';
+---
+
+<Layout title="ssg — todos">
+  <TodosIsland client:load />
+</Layout>

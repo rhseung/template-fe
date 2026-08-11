@@ -6,6 +6,6 @@
   "scripts": {
     "sync": "bun scripts/sync.ts",
     "check": "bun scripts/sync.ts --check",
-    "format": "cd templates/csr && bunx --bun prettier --write --config .prettierrc --ignore-path .prettierignore ../../shared ../../scripts ../../README.md"
+    "format": "cd templates/csr && bunx --bun prettier --write --config prettier.config.js --ignore-path .prettierignore ../../shared ../../scripts ../../README.md"
   }
 }
