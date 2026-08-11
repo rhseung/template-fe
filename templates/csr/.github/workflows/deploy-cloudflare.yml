@@ -1,0 +1,38 @@
+# `bun run init`이 고르지 않은 배포 워크플로를 지우고, 모든 템플릿이 `bun run deploy`를
+# 노출하도록 정규화한다. 그래서 이 파일이 템플릿 전체에서 바이트 단위로 같다.
+#
+# 필요한 레포 시크릿: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
+# ci.yml 뒤에 세우려면 `workflow_run`이 아니라 브랜치 보호 규칙을 쓴다.
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - run: bun install --frozen-lockfile
+
+      # wrangler가 CLOUDFLARE_API_TOKEN을 환경에서 직접 읽으므로,
+      # cloudflare/wrangler-action은 이미 있는 스크립트 대비 얻는 게 없다.
+      - run: bun run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}

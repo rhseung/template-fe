@@ -1,0 +1,12 @@
+bun.lock
+dist
+storybook-static
+playwright-report
+test-results
+coverage
+
+# 생성물 — 생성기의 포맷을 그대로 둔다
+src/api
+src/@types
+**/*.gen.ts
+public/mockServiceWorker.js

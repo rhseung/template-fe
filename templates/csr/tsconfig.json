@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  // `.storybook`은 명시적 glob이 필요하다 — 아니면 tsc가 점 디렉토리를 건너뛴다.
+  // `scripts/`는 의도적으로 빠져 있다: `init.ts`는 Bun 전용이고 자기를 지운다.
+  "include": ["src", "e2e", ".storybook/**/*.ts", ".storybook/**/*.tsx", "*.ts", "*.js"],
+  "compilerOptions": {
+    // `msw-storybook-addon/csf3`가 preview와 스토리의 `parameters.msw` 타입을 잡아준다.
+    "types": ["vite/client", "node", "msw-storybook-addon/csf3"],
+    // `baseUrl` 없음 — TS 6에서 deprecate됐다. `paths`는 이 파일 기준으로 해석된다.
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
