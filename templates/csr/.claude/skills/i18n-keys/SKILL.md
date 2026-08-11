@@ -11,8 +11,9 @@ description: 이 프로젝트에서 사용자에게 보이는 문자열을 추�
 ## 루프
 
 1. 컴포넌트에서 네임스페이스 하나를 바인딩한다: `useTranslation('todos')`
-2. 그 안에서는 바인딩한 네임스페이스의 키를 그대로 호출한다: `t('form.submit')`
-   (`ns:` 접두 없음 — 다른 네임스페이스가 필요하면 `t('actions.switchLanguage', { ns: 'common' })`)
+2. 키는 문자열이 아니라 **셀렉터 함수**로 부른다: `t(($) => $.form.submit)`
+   (`enableSelector: true` — 다른 네임스페이스는 `t(($) => $.actions.switchLanguage, { ns: 'common' })`,
+   보간값도 같은 자리에 옵션으로: `t(($) => $.page.remaining, { value: n })`)
 3. `bun run gen:i18n`
 4. `src/locales/ko/<ns>.json`을 먼저 채우고, 그다음 `src/locales/en/<ns>.json`
 5. `bun run typecheck` — 생성된 `resources.d.ts`가 이제 그 키를 안다
@@ -36,13 +37,13 @@ resources: {
 
 ## 키가 사라지는 두 가지 경우
 
-**동적 키.** 보간해서 만든 키는 정적으로 안 보이므로 추출되지 않고, 손으로 넣어둔 키도 같이
-지워진다. 정적 조회로 바꾼다:
+**동적 키.** 셀렉터는 함수라 애초에 문자열 보간이 안 된다 — `t($ => $[x])` 같은 건 타입도,
+추출도 안 통한다. 정적 조회로 바꾼다:
 
 ```tsx
 const label: Record<Filter, string> = {
-  all: t('filter.all'),
-  active: t('filter.active'),
+  all: t(($) => $.filter.all),
+  active: t(($) => $.filter.active),
 };
 ```
 
@@ -66,7 +67,13 @@ bun run i18n:lint                                              # 하드코딩 �
   재생성을 안 했거나, 마지막 호출부가 사라진 키가 남아 있다는 뜻이다.
 - `bun run i18n:lint`가 키로 빠져야 할 하드코딩 문자열을 보고한다.
 - `aria-label`과 `data-testid`는 추출 대상에서 빠져 있지만, `aria-label`도 번역은 필요하다.
-  `t('…')`를 명시적으로 넣는다.
+  셀렉터를 명시적으로 넣는다.
+
+## `enableSelector`를 끄고 싶으면
+
+`src/@types/i18next.d.ts`를 열어서 고치지 않는다 — 이미 존재하는 파일은 i18next-cli가
+다시 쓰지 않는다(최초 생성 시에만 `i18next.config.ts`의 `types.enableSelector`를 반영한다).
+`i18next.config.ts`를 고치고 `rm src/@types/i18next.d.ts && bun run gen:i18n`.
 
 ## 날짜
 

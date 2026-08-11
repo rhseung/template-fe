@@ -36,8 +36,8 @@ export function TodoList({ todos, isLoading, isError, onToggle }: TodoList.Props
     return (
       <Empty>
         <EmptyHeader>
-          <EmptyTitle>{t('list.error.title')}</EmptyTitle>
-          <EmptyDescription>{t('list.error.description')}</EmptyDescription>
+          <EmptyTitle>{t(($) => $.list.error.title)}</EmptyTitle>
+          <EmptyDescription>{t(($) => $.list.error.description)}</EmptyDescription>
         </EmptyHeader>
       </Empty>
     );
@@ -50,8 +50,8 @@ export function TodoList({ todos, isLoading, isError, onToggle }: TodoList.Props
           <EmptyMedia variant="icon">
             <ListChecksIcon />
           </EmptyMedia>
-          <EmptyTitle>{t('list.empty.title')}</EmptyTitle>
-          <EmptyDescription>{t('list.empty.description')}</EmptyDescription>
+          <EmptyTitle>{t(($) => $.list.empty.title)}</EmptyTitle>
+          <EmptyDescription>{t(($) => $.list.empty.description)}</EmptyDescription>
         </EmptyHeader>
       </Empty>
     );

@@ -23,14 +23,14 @@ export function SiteHeader({ className }: SiteHeader.Props) {
       )}
     >
       <div className="mx-auto flex h-14 max-w-3xl items-center justify-between gap-4 px-4">
-        <span className="text-sm font-semibold tracking-tight">{t('app.name')}</span>
+        <span className="text-sm font-semibold tracking-tight">{t(($) => $.app.name)}</span>
 
         <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => void i18n.changeLanguage(nextLanguage)}
-            aria-label={t('actions.switchLanguage')}
+            aria-label={t(($) => $.actions.switchLanguage)}
           >
             <GlobeIcon data-icon="inline-start" />
             {nextLanguage.toUpperCase()}
@@ -40,7 +40,7 @@ export function SiteHeader({ className }: SiteHeader.Props) {
             variant="ghost"
             size="icon-sm"
             onClick={() => setTheme(isDark ? 'light' : 'dark')}
-            aria-label={t('actions.toggleTheme')}
+            aria-label={t(($) => $.actions.toggleTheme)}
           >
             {isDark ? <SunIcon /> : <MoonIcon />}
           </Button>

@@ -50,16 +50,16 @@ export function TodoForm({
                   id={field.name}
                   name={field.name}
                   value={field.state.value}
-                  placeholder={t('form.placeholder')}
+                  placeholder={t(($) => $.form.placeholder)}
                   maxLength={maxLength}
-                  aria-label={t('form.label')}
+                  aria-label={t(($) => $.form.label)}
                   aria-invalid={invalid || undefined}
                   onBlur={field.handleBlur}
                   onChange={(event) => field.handleChange(event.target.value)}
                 />
                 <Button type="submit" disabled={isPending}>
                   <PlusIcon data-icon="inline-start" />
-                  {t('form.submit')}
+                  {t(($) => $.form.submit)}
                 </Button>
                 <FieldError errors={field.state.meta.errors} />
               </Field>

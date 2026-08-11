@@ -47,10 +47,10 @@ function NotFound() {
     <div className="flex min-h-dvh items-center justify-center p-6">
       <Empty>
         <EmptyHeader>
-          <EmptyTitle>{t('notFound.title')}</EmptyTitle>
-          <EmptyDescription>{t('notFound.description')}</EmptyDescription>
+          <EmptyTitle>{t(($) => $.notFound.title)}</EmptyTitle>
+          <EmptyDescription>{t(($) => $.notFound.description)}</EmptyDescription>
         </EmptyHeader>
-        <Button nativeButton={false} render={<Link to="/">{t('notFound.action')}</Link>} />
+        <Button nativeButton={false} render={<Link to="/">{t(($) => $.notFound.action)}</Link>} />
       </Empty>
     </div>
   );

@@ -186,15 +186,22 @@ zod v4는 Standard Schema라서 resolver 패키지 없이 `validators`에 그대
 CI는 `bun run gen` 후 `git diff --exit-code`로 JSON이 최신인지 검증한다.
 
 - 네임스페이스 = feature 이름 + `common`. `defaultNS`는 `common`.
-- 컴포넌트는 **네임스페이스 하나를 바인딩**한다: `useTranslation('todos')`,
-  그 안에서는 `t('form.submit')`처럼 **키를 그대로** 쓴다 (`ns:` 접두 없음).
-- 다른 네임스페이스 키가 필요하면 `t('actions.switchLanguage', { ns: 'common' })`처럼
-  옵션으로 넘긴다. `t('common:actions.switchLanguage')` 형태는 쓰지 않는다.
+- **키는 문자열이 아니라 셀렉터 함수로 부른다** (`enableSelector: true`, `i18next.config.ts`):
+  `t(($) => $.form.submit)`. `t('form.submit')`은 쓰지 않는다 — 자동완성·정의로 이동·
+  오타 시 컴파일 에러가 이 형태에서만 나온다.
+- 컴포넌트는 **네임스페이스 하나를 바인딩**한다: `useTranslation('todos')`.
+  셀렉터는 그 네임스페이스 기준으로 풀린다 (`$.form.submit` = `todos:form.submit`).
+- 다른 네임스페이스 키가 필요하면 `t(($) => $.actions.switchLanguage, { ns: 'common' })`처럼
+  옵션으로 넘긴다.
+- 값 보간은 옵션 객체로: `t(($) => $.page.remaining, { value: remaining })`.
 - 새 키를 넣었으면 `bun run gen:i18n`. ko를 먼저 채우고 en을 채운다.
 - **`extractFromComments`가 켜져 있다.** 주석 안에 번역 호출을 그대로 써두면 진짜 키가 생긴다.
   주석에는 설명만 쓰고 호출 형태를 붙여넣지 않는다.
-- 동적 키(``t(`ns:${x}`)``)는 추출되지 않고 `removeUnusedKeys`에 지워진다.
-  정적 맵을 만들어서 쓴다 (`todos-page.tsx`의 `filterLabel` 참고).
+- 동적 키는 셀렉터로 표현할 수 없다 — 정적 맵을 만들어서 각 항목을 셀렉터로 호출한다
+  (`todos-page.tsx`의 `filterLabel` 참고).
+- `src/@types/i18next.d.ts`도 생성물이다. `enableSelector`를 바꾸려면 이 파일이 아니라
+  `i18next.config.ts`의 `types.enableSelector`를 고치고 파일을 지운 뒤 `bun run gen:i18n`한다
+  — 이미 존재하는 파일은 i18next-cli가 다시 쓰지 않는다 (최초 생성 시에만 config를 반영).
 - dayjs 로케일은 `common/lib/dayjs.ts`가 i18next를 따라가게 해뒀다. 직접 `dayjs.locale()`을 부르지 않는다.
 
 ## 7. 테스트

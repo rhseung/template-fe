@@ -35,9 +35,9 @@ export function TodosPage() {
   // `extractFromComments`가 켜져 있다는 점에 주의 — 주석 안에 번역 호출을 써두면
   // 진짜 키가 생긴다. 설명만 쓰고 호출 형태를 붙여넣지 않는다.
   const filterLabel: Record<TodoFilter, string> = {
-    all: t('filter.all'),
-    active: t('filter.active'),
-    done: t('filter.done'),
+    all: t(($) => $.filter.all),
+    active: t(($) => $.filter.active),
+    done: t(($) => $.filter.done),
   };
 
   return (
@@ -46,9 +46,9 @@ export function TodosPage() {
 
       <main className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-8">
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-semibold tracking-tight">{t('page.title')}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{t(($) => $.page.title)}</h1>
           <p className="text-muted-foreground text-sm">
-            {t('page.remaining', { value: remaining })}
+            {t(($) => $.page.remaining, { value: remaining })}
           </p>
         </div>
 
@@ -60,7 +60,7 @@ export function TodosPage() {
           onSubmit={createTodo}
         />
 
-        <div className="flex gap-1" role="group" aria-label={t('filter.label')}>
+        <div className="flex gap-1" role="group" aria-label={t(($) => $.filter.label)}>
           {filters.map((value) => (
             <Button
               key={value}

@@ -3,7 +3,7 @@ import type Resources from './resources';
 
 declare module 'i18next' {
   interface CustomTypeOptions {
-    enableSelector: false;
+    enableSelector: true;
     defaultNS: 'common';
     resources: Resources;
   }

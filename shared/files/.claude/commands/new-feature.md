@@ -29,7 +29,7 @@ src/features/$1/
 4. `src/locales/ko/$1.json`, `src/locales/en/$1.json` 생성
 5. `src/common/lib/i18n.ts`의 `I18N_NAMESPACES`**와** `resources` **둘 다**에 `'$1'` 등록
 
-하나라도 빠지면 `t('$1:…')`이 i18n과 무관해 보이는 메시지로 타입체크에서 깨진다.
+하나라도 빠지면 `t(($) => $….)` 셀렉터가 존재하지 않는 프로퍼티 접근으로 타입체크에서 깨진다.
 
 ## 걸려 넘어질 규칙
 
@@ -38,7 +38,8 @@ src/features/$1/
 - View는 `../models`를 import할 수 없다. Model 타입이 필요하면 `viewmodels/index.ts`에서
   재export하고 거기서 가져온다.
 - 컴포넌트마다 `index.stories.tsx`를 만든다.
-- 네임스페이스를 명시 바인딩한다: `useTranslation(['$1', 'common'])`.
+- 네임스페이스를 바인딩한다: `useTranslation('$1')`. 키는 셀렉터로: `t(($) => $.foo.bar)`,
+  `common` 키가 필요하면 `t(($) => $.foo, { ns: 'common' })`.
 
 ## 마무리
 
