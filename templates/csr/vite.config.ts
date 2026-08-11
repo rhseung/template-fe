@@ -30,6 +30,11 @@ export default defineConfig({
     alias: { '@': path.resolve(dirname, './src') },
   },
 
+  // 스토리가 적으면(예: `--no-example` 직후) Vite의 esbuild 스캔이 aria-query를
+  // 못 찾아서 "does not provide an export named 'elementRoles'"로 터진다.
+  // 강제 프리번들로 스캔 결과와 무관하게 항상 잡는다.
+  optimizeDeps: { include: ['@testing-library/dom'] },
+
   server: { port: 5173 },
 
   build: {
