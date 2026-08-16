@@ -29,16 +29,16 @@ bunx degit rhseung/template-fe/templates/ssg       my-app
 
 ## 공통으로 들어있는 것
 
-- **MVVM을 린트로 강제** — `eslint-plugin-boundaries`가 View→Model 직접 접근, ViewModel→View 참조를 에러로 막는다
-- **`src/features/<name>/{models,viewmodels,views}`** + 루트 배럴 없는 `src/common/`
-- **백엔드 자동 연결** — OpenAPI 스펙 하나로 타입·클라이언트·zod·react-query 훅 생성 (Hey API)
-- **i18next-cli** — `t()` 호출에서 키를 추출하고 `src/@types`에 타입까지 생성. ko 우선, en 보조
-- **shadcn/ui** (`base-nova` / Base UI) + Tailwind v4 CSS-first + Phosphor 아이콘
-- **Storybook** — 테마·로케일 툴바 데코레이터 포함. 스토리가 곧 vitest 브라우저 테스트
-- **Playwright** e2e + **MSW** — 백엔드 없이 `bun dev`가 돈다
-- **엄격한 ESLint** — kebab-case 강제, named export만, 배럴 경유 import, React Compiler 룰
-- **CI** — lint/typecheck/test/build/storybook + [react-doctor](https://react.doctor) PR 스캔
-- **`AGENTS.md`** — Claude Code / Cursor / Copilot이 전부 이 파일 하나를 읽는다
+- **MVVM을 린트로 강제한다.** `eslint-plugin-boundaries`가 View→Model 직접 접근, ViewModel→View 참조를 에러로 막는다.
+- 구조는 `src/features/<name>/{models,viewmodels,views}` + 루트 배럴 없는 `src/common/`.
+- **백엔드는 OpenAPI 스펙 하나면 붙는다.** Hey API가 타입·클라이언트·zod·react-query 훅을 한 번에 생성한다.
+- i18n은 i18next-cli가 돌린다. `t()` 호출에서 키를 뽑고 `src/@types`에 타입까지 만든다. ko 먼저, en 나중.
+- UI는 shadcn/ui(`base-nova` / Base UI) + Tailwind v4 CSS-first + Phosphor 아이콘.
+- **Storybook 스토리가 곧 테스트다.** 테마·로케일 툴바 데코레이터 포함, vitest 브라우저 프로젝트로 실행된다.
+- Playwright e2e와 MSW가 같이 온다 — 백엔드 없이 `bun dev`가 돈다.
+- ESLint는 엄격하다. kebab-case, named export만, 배럴 경유 import, React Compiler 룰까지.
+- CI는 lint/typecheck/test/build/storybook을 다 돌리고, [react-doctor](https://react.doctor)가 PR을 스캔한다.
+- `AGENTS.md` 하나를 Claude Code, Cursor, Copilot이 전부 읽는다.
 
 ## 유지보수
 

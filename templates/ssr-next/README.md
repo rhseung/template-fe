@@ -53,14 +53,15 @@ src/
 └── mocks/             # MSW. dev·Storybook·vitest·Playwright가 공유.
 ```
 
-**계층 규칙은 ESLint가 강제한다.** View는 Model을 직접 못 보고, ViewModel은 View를
-참조 못 하고, Model은 최하위다. 어기면 한국어 에러 메시지가 고치는 법까지 알려준다.
+계층 규칙은 ESLint가 강제한다. View→Model 직접 접근, ViewModel→View 참조가 막혀 있고
+Model은 항상 최하위다. 어기면 한국어 에러 메시지가 고치는 법까지 알려준다.
 
-**`features/todos`의 page 컴포넌트와 그 배럴 체인이 `'use client'`다.** App Router에서
-서버 컴포넌트가 클라이언트 컴포넌트를 직접 import하려면 그 컴포넌트 자신에게 지시어가
-필요하고, `index.ts` 배럴을 거치면 Next의 알려진 버그 때문에 그 배럴들에도 지시어가
-필요하다 — 하위 컴포넌트(`TodoForm`, `TodoList`, `SiteHeader`)는 지시어 없이도 같은
-클라이언트 번들에 자동으로 딸려온다. 자세한 판단 기준은 [`AGENTS.md`](./AGENTS.md).
+`features/todos`의 page 컴포넌트와 그 배럴 체인엔 전부 `'use client'`가 붙어 있다.
+App Router에서 서버 컴포넌트가 클라이언트 컴포넌트를 직접 import하려면 그 컴포넌트
+자신에게 지시어가 필요한데, `index.ts` 배럴을 거치는 경우엔 Next의 알려진 버그 때문에
+그 배럴들에도 똑같이 지시어를 달아야 한다. 하위 컴포넌트(`TodoForm`, `TodoList`,
+`SiteHeader`)는 지시어 없이도 같은 클라이언트 번들에 자동으로 딸려온다. 자세한 판단
+기준은 [`AGENTS.md`](./AGENTS.md).
 
 자세한 규약은 [`AGENTS.md`](./AGENTS.md) — 사람과 AI 어시스턴트가 같은 파일을 읽는다.
 
@@ -114,10 +115,14 @@ NEXT_PUBLIC_ENABLE_MSW=false
 
 ## AI 코드리뷰
 
-- **가장 쉬운 길** — [CodeRabbit](https://github.com/marketplace/coderabbitai) GitHub App 설치.
-  공개 레포 영구 무료, 설정 파일 0개, 포크 PR도 리뷰한다.
-- **Claude로 하고 싶으면** — `claude setup-token` → 시크릿 `CLAUDE_CODE_OAUTH_TOKEN` +
-  변수 `ENABLE_CLAUDE_REVIEW=true`. `.github/workflows/review.yml` 참고.
-- **공짜 보너스** — Settings → Code security에서 CodeQL default setup 켜기.
+아무것도 안 해도 되는 쪽부터: [CodeRabbit](https://github.com/marketplace/coderabbitai)
+GitHub App만 설치하면 끝난다. 공개 레포는 영구 무료고 설정 파일도 시크릿도 필요 없고,
+포크 PR까지 리뷰해준다.
 
-`react-doctor.yml`은 시크릿이 필요 없어 처음부터 켜져 있다.
+Claude로 하고 싶으면 조금 더 손이 간다. `claude setup-token`으로 `CLAUDE_CODE_OAUTH_TOKEN`
+시크릿을 만들고 레포 변수에 `ENABLE_CLAUDE_REVIEW=true`를 추가하면 된다
+(`.github/workflows/review.yml` 참고).
+
+공짜로 하나 더 얹고 싶으면 Settings → Code security에서 CodeQL default setup만 켜면 된다.
+
+`react-doctor.yml`은 시크릿이 필요 없어서 애초에 켜져 있다.
