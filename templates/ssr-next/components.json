@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "base-nova",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/styles.css",
+    "baseColor": "zinc",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "@/common/components",
+    "ui": "@/common/components/ui",
+    "utils": "@/common/utils",
+    "lib": "@/common/lib",
+    "hooks": "@/common/viewmodels"
+  },
+  "iconLibrary": "phosphor"
+}

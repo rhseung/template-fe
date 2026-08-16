@@ -1,0 +1,32 @@
+node_modules
+.DS_Store
+*.local
+
+# 빌드 산출물
+dist
+dist-ssr
+.next
+.open-next
+.wrangler
+.vercel
+
+# 생성물(`src/api`, `src/@types`)은 **커밋한다.**
+#
+# Bun은 루트 패키지의 `prepare`도 `postinstall`도 실행하지 않는다. 설치 시 재생성 훅은
+# 조용히 아무 일도 안 하고, 새로 클론한 사람은 `bun dev`가 깨진 상태로 만난다.
+# 커밋해두면 `degit → bun install → bun dev`가 그대로 돌고,
+# CI가 `bun run gen`을 다시 돌려 체크인된 파일이 최신인지 증명한다.
+
+# env
+.env
+.env.*
+!.env.example
+
+# 테스트 / storybook
+storybook-static
+*storybook.log
+playwright-report
+test-results
+blob-report
+.playwright-mcp
+coverage

@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bun run:*)",
+      "Bash(bun install)",
+      "Bash(bun add:*)",
+      "Bash(bunx --bun shadcn:*)",
+      "Bash(bunx eslint:*)",
+      "Bash(bunx prettier:*)",
+      "Bash(bunx tsc:*)",
+      "Bash(bunx vitest:*)",
+      "Bash(bunx playwright:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(rg:*)",
+      "Bash(fd:*)",
+      "Bash(eza:*)"
+    ]
+  }
+}
