@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ${{ runner.temp }}/app
+        working-directory: /tmp/app
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
@@ -41,12 +41,15 @@ jobs:
       # degit 출력물을 바이트 단위로 재현한다 — 추적 파일만, `.git` 없이.
       # 원본 체크아웃을 그냥 빌드하면 필요한 파일이 gitignore에 걸려 있어도 통과해버린다.
       # 이렇게 해야 사용자 터미널이 아니라 여기서 터진다.
+      #
+      # `defaults.run.working-directory`는 `runner` 컨텍스트를 못 쓴다(워크플로 파싱
+      # 시점에 평가돼서 `runner.temp`가 아직 없다) — 그래서 `/tmp/app` 고정 경로를 쓴다.
       - name: 템플릿 내보내기 (degit과 동일)
         working-directory: ${{ github.workspace }}
         run: |
-          mkdir -p "$RUNNER_TEMP/app"
+          mkdir -p /tmp/app
           git archive HEAD "templates/${{ matrix.template }}" \
-            | tar -x -C "$RUNNER_TEMP/app" --strip-components=2
+            | tar -x -C /tmp/app --strip-components=2
 
       - uses: actions/cache@v6
         with:
