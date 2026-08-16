@@ -14,12 +14,11 @@ const showDevtools = import.meta.env.PUBLIC_DEVTOOLS === '1';
 
 /**
  * CSR의 `main.tsx`(MSW 부트스트랩) + `routes/__root.tsx`(Provider 트리)를 합친 자리.
+ * Astro는 앱 전체를 한 번에 마운트하는 진입점이 없고 아일랜드마다 독립된 React 루트라서,
+ * 상호작용하는 페이지는 전부 `<AppProviders client:load>`로 감싼다.
  *
- * Astro는 앱 전체를 한 번에 마운트하는 진입점이 없다 — 아일랜드마다 독립된 React 루트다.
- * 그래서 상호작용하는 페이지는 전부 이 컴포넌트로 감싼다: `<AppProviders client:load>`.
- *
- * `PUBLIC_ENABLE_MSW`가 켜져 있으면 목이 뜨기 전엔 아무것도 렌더링하지 않는다 —
- * 자식이 먼저 그려지면 워커가 준비되기 전에 실제 fetch가 나갈 수 있다.
+ * `PUBLIC_ENABLE_MSW`가 켜져 있으면 목이 뜨기 전엔 자식을 렌더하지 않는다.
+ * 먼저 그려지면 워커가 준비되기 전에 진짜 fetch가 나가버린다.
  */
 let mockingReady: Promise<void> | null = null;
 

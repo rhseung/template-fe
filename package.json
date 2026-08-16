@@ -2,7 +2,7 @@
   "name": "template-fe",
   "private": true,
   "type": "module",
-  "description": "Frontend paradigm templates \u2014 CSR / SSR / SSG. Not a workspace: each templates/* is a standalone project.",
+  "description": "Frontend paradigm templates — CSR / SSR / SSG. Not a workspace: each templates/* is a standalone project.",
   "scripts": {
     "sync": "bun scripts/sync.ts",
     "check": "bun scripts/sync.ts --check",

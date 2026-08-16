@@ -35,10 +35,10 @@ const showDevtools = import.meta.env.VITE_DEVTOOLS === '1';
 function RootDocument({ children }: { children: React.ReactNode }) {
   const { queryClient } = Route.useRouteContext();
 
-  // 서버·클라이언트 첫 렌더(하이드레이션 이전)는 반드시 같은 결과를 그려야 한다.
-  // MSW가 준비되기 전에 라우트 트리가 그려지면 첫 fetch가 실패하고, `detectLanguage()`도
-  // 서버엔 `navigator`가 없어 클라이언트와 다른 언어를 고를 수 있다 — 그래서 두 환경
-  // 모두 `ready=false`로 시작해서 빈 셸을 그리고, 마운트 뒤 `useEffect`에서만 갈린다.
+  // 서버와 클라이언트의 첫 렌더(하이드레이션 이전)는 결과가 같아야 한다. MSW가 뜨기
+  // 전에 라우트 트리가 그려지면 첫 fetch가 실패하고, `detectLanguage()`도 서버엔
+  // `navigator`가 없어서 클라이언트랑 다른 언어를 고를 수 있다. 그래서 두 환경 다
+  // `ready=false`로 빈 셸부터 그리고, 마운트 뒤 `useEffect`에서만 실제 화면으로 바뀐다.
   const [ready, setReady] = useState(false);
 
   useEffect(() => {

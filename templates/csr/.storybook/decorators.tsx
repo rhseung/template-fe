@@ -17,9 +17,8 @@ import type { Decorator } from '@storybook/react-vite';
 /**
  * 데코레이터마다 실제 컴포넌트에 위임한다.
  *
- * `Decorator`는 화살표 함수라서 그 안에서 훅을 직접 부르면
- * `react-hooks/rules-of-hooks`에 걸린다. 그리고 그 규칙이 맞다 —
- * 데코레이터가 렌더 중에 호출된다는 보장이 없다.
+ * `Decorator`는 화살표 함수라서 그 안에서 훅을 직접 부르면 `react-hooks/rules-of-hooks`에
+ * 걸린다. 데코레이터가 렌더 중에 불린다는 보장이 없으니 그 규칙이 맞는 말이다.
  */
 
 function WithQueryClient({ children }: { children: ReactNode }) {

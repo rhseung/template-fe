@@ -6,7 +6,7 @@ export default interface Resources {
       "toggleTheme": "테마 바꾸기"
     },
     "app": {
-      "name": "template-fe / csr"
+      "name": "template-fe / ssg"
     },
     "notFound": {
       "action": "홈으로",
