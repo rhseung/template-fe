@@ -10,12 +10,6 @@ type TodoFilterState = {
   setFilter: (filter: TodoFilter) => void;
 };
 
-/**
- * 전역 *클라이언트* 상태. TanStack Query가 담당하지 않는 유일한 영역이다.
- *
- * 판단 기준: 새로고침하면 잊어도 되는 값이면 page의 `useState`, 서버에서 온 값이면 쿼리.
- * 그 둘 다 아닌 것만 여기로 온다.
- */
 export const useTodoFilter = create<TodoFilterState>()(
   persist(
     (set) => ({

@@ -2,10 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/common/components';
 
-/**
- * `src/pages/404.astro`가 마운트하는 단일 아일랜드. CSR의 `routes/__root.tsx`의
- * `NotFound`와 같은 컴포넌트를 라우터 없이 쓴다 — `<Link>` 대신 `<a>`.
- */
+// 라우터가 없어서 `<Link>` 대신 `<a>`를 쓴다.
 export function NotFound() {
   const { t } = useTranslation('common');
 

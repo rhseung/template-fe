@@ -7,8 +7,7 @@ export type RouterContext = {
   queryClient: QueryClient;
 };
 
-// TanStack Start가 이 파일에서 `getRouter`라는 이름을 찾는다 — 서버·클라이언트
-// 엔트리 둘 다 여기로 라우터를 만든다. 이름을 바꾸면 안 된다.
+// TanStack Start가 `getRouter`라는 이름으로 이 함수를 찾는다 — 리네임 금지.
 export function getRouter() {
   const queryClient = new QueryClient({
     defaultOptions: {

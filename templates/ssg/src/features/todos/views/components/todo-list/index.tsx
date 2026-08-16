@@ -13,10 +13,6 @@ import {
 } from '@/common/components';
 import { dayjs } from '@/common/lib';
 
-/**
- * 표현 전용. ViewModel도, `@/api`도, 데이터 페칭도 없다. 전부 page가 갖고 있고
- * 이 컴포넌트는 props만 받아서, 아래 모든 상태를 목킹 없이 스토리로 재현할 수 있다.
- */
 export function TodoList({ todos, isLoading, isError, onToggle }: TodoList.Props) {
   const { t } = useTranslation('todos');
 
@@ -83,10 +79,6 @@ export function TodoList({ todos, isLoading, isError, onToggle }: TodoList.Props
   );
 }
 
-/**
- * 손으로 쓰는 것은 `tailwind-variants`. shadcn 프리미티브는 CVA로 나오는데,
- * `ui:add`마다 패치하느니 그냥 두는 게 맞다.
- */
 const row = tv({
   base: 'border-border bg-card flex items-center gap-3 rounded-lg border px-3 py-2.5 transition-colors',
 });
@@ -102,11 +94,8 @@ const title = tv({
 });
 
 export declare namespace TodoList {
-  /**
-   * Model의 `Todo`를 가져오지 않고 컴포넌트가 자기 아이템 모양을 직접 소유한다.
-   * `eslint-plugin-boundaries`가 View → Model을 막기도 하고, 좁은 prop 타입이라야
-   * 컴포넌트를 다른 데서도 재사용하기 쉽다.
-   */
+  // Model의 `Todo`를 가져오지 않고 자기 아이템 모양을 직접 소유한다 — 좁은 prop 타입이라야
+  // 재사용하기 쉽고, boundaries 규칙상 View는 Model을 못 본다.
   export type Item = {
     id: number;
     title: string;

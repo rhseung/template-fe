@@ -4,10 +4,8 @@ import type { Metadata } from 'next';
 
 import '../styles.css';
 
-// `@/common/lib`의 부수효과(API 클라이언트 설정, dayjs↔i18next 연동, i18next 초기화)는
-// 여기(서버 컴포넌트)가 아니라 `providers.tsx`('use client')에서 트리거한다. 여기서
-// import하면 빌드가 깨진다 — `react-i18next`가 쓰는 `React.createContext`가 서버
-// 컴포넌트 모듈 그래프의 React엔 없어서다.
+// `@/common/lib` 부수효과 import는 여기가 아니라 `providers.tsx`에서 트리거한다 —
+// 서버 컴포넌트에서 react-i18next를 로드하면 createContext가 없어 빌드가 깨진다.
 
 export const metadata: Metadata = {
   title: 'template-fe / ssr-next',

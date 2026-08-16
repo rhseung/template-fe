@@ -54,8 +54,6 @@ export default defineConfig({
   test: {
     projects: [
       {
-        // 모든 스토리가 실제 브라우저에서 테스트로 돈다. `play()`가 있으면 인터랙션 테스트가 된다.
-        // 컴포넌트 검증은 여기서 이뤄진다.
         extends: true,
         plugins: [storybookTest({ configDir: path.join(dirname, '.storybook') })],
         test: {
@@ -70,7 +68,6 @@ export default defineConfig({
         },
       },
       {
-        // 프레임워크 없는 로직만. 렌더링되는 건 전부 스토리로 간다.
         extends: true,
         test: {
           name: 'unit',

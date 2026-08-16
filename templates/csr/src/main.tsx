@@ -4,7 +4,6 @@ import { RouterProvider } from '@tanstack/react-router';
 
 import { createRoot } from 'react-dom/client';
 
-// 부수효과 import: API 클라이언트를 설정하고 dayjs를 i18next에 연결한다.
 import '@/common/lib';
 
 import { createAppRouter } from './router';

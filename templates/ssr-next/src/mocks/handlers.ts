@@ -2,12 +2,6 @@ import { HttpResponse, http } from 'msw';
 
 import type { CreateTodo, Todo, UpdateTodo } from '@/api/types.gen';
 
-/**
- * 목 데이터의 단일 원천. dev, Storybook, vitest 브라우저 프로젝트, Playwright가
- * 모두 이 핸들러를 읽는다. 픽스처는 한 번만 쓰면 된다.
- *
- * 예제를 지울 때 todo 핸들러도 같이 지우고, 파일 자체는 남긴다.
- */
 let nextId = 4;
 
 let todos: Todo[] = [

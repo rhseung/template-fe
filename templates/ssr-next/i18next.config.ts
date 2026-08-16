@@ -1,13 +1,6 @@
 import { defineConfig } from 'i18next-cli';
 
-/**
- * `bun run gen:i18n` = 추출 + 타입 생성.
- *
- * 키는 JSON을 편집해서가 아니라 코드에서 *써서* 만든다. 컴포넌트에 `t(($) => $.x)`가
- * 나타나면 → 추출이 키를 만들고 → 사람이 한국어를 채운다.
- * `removeUnusedKeys` 덕에 호출부를 지우면 키도 지워지므로, CI는 `git diff --exit-code`
- * 한 줄로 누락 키와 유령 키를 동시에 잡는다.
- */
+/** `bun run gen:i18n` = 추출 + 타입 생성. AGENTS.md §6 참고. */
 export default defineConfig({
   locales: ['ko', 'en'],
 
@@ -44,8 +37,7 @@ export default defineConfig({
     input: ['src/locales/ko/*.json'],
     output: 'src/@types/i18next.d.ts',
     resourcesFile: 'src/@types/resources.d.ts',
-    // 문자열 키(`t('form.submit')`) 대신 셀렉터 함수(`t($ => $.form.submit)`)로 접근한다.
-    // 자동완성·정의로 이동·오타 시 컴파일 에러가 생긴다. react-i18next 17.0.7+ / i18next 26.0.10+ 필요.
+    // react-i18next 17.0.7+ / i18next 26.0.10+ 필요.
     enableSelector: true,
   },
 });

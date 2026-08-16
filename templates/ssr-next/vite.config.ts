@@ -13,16 +13,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 // Next 앱 자체는 webpack/turbopack으로 빌드된다 — 이 파일은 Storybook·vitest 전용이고
 // `next.config.ts`와 무관하다.
 export default defineConfig({
-  plugins: [
-    react({
-      // React Compiler는 기본 off. 켜려면:
-      //   bun add -d babel-plugin-react-compiler @rolldown/plugin-babel
-      //   babel: { plugins: [['babel-plugin-react-compiler', {}]] },
-      // `eslint-plugin-react-hooks@7`이 컴파일러의 린트 가치를 빌드 비용 0으로 이미 준다.
-      // 그래서 이건 안전성이 아니라 성능 판단이다.
-    }),
-    tailwindcss(),
-  ],
+  plugins: [react(), tailwindcss()],
 
   resolve: {
     alias: { '@': path.resolve(dirname, './src') },

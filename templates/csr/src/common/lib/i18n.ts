@@ -8,21 +8,13 @@ import todosKo from '@/locales/ko/todos.json';
 
 import { detectLanguage } from './languages';
 
-/**
- * feature 하나당 네임스페이스 하나, 거기에 `common`을 더한 구성.
- * feature를 추가하면 여기에 이름을 넣고 위쪽 JSON import 두 줄도 같이 추가한다.
- */
 export const I18N_NAMESPACES = ['common', 'todos'] as const;
 
 export type I18nNamespace = (typeof I18N_NAMESPACES)[number];
 
-/**
- * 리소스는 런타임에 가져오지 않고 정적으로 import한다.
- *
- * HTTP 백엔드를 쓰면 첫 페인트에 요청 워터폴이 생기고, 이 템플릿을 워커 위의 SSR/SSG로
- * 옮길 때 아예 깨진다. 네임스페이스 2개 × 언어 2개는 몇 KB 수준이다.
- * 로케일 파일이 커지면 그때 `i18next-resources-to-backend`를 검토한다.
- */
+// HTTP 백엔드 대신 정적 import를 쓴다. 첫 페인트에 요청 워터폴이 안 생기고, 몇 KB 수준의
+// 리소스라 워커 SSR/SSG로 옮겨도 깨지지 않는다. 로케일 파일이 커지면 그때
+// `i18next-resources-to-backend`를 검토한다.
 void i18next.use(initReactI18next).init({
   resources: {
     ko: { common: commonKo, todos: todosKo },

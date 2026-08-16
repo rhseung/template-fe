@@ -26,7 +26,6 @@ const preview: Preview = {
 
   parameters: {
     layout: 'centered',
-    // dev·vitest·Playwright가 쓰는 것과 같은 핸들러. 픽스처 하나, 소비자 넷.
     msw: handlers,
     // 위반이 있으면 vitest 실행이 실패한다. 백로그를 못 치우고 먼저 머지해야 하면
     // 'todo'로 낮추되, 의식적으로 낮춘다.

@@ -22,15 +22,9 @@ export default defineConfig({
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 
   webServer: {
-    // 3000이 아니라 3001을 쓴다. e2e와 별개로 돌아가는 dev 서버가 공존하도록.
-    //
-    // `bunx --bun vite`가 아니라 `node`로 직접 돌린다. cloudflare 타깃이 켜지면
-    // `@cloudflare/vite-plugin`이 로컬 workerd로 가는 웹소켓 브리지를 붙이는데, Bun의 `ws`
-    // 구현이 그 브리지가 쓰는 'upgrade'/'unexpected-response' 이벤트를 아직 못 받는다.
-    // 그러면 `vite dev`가 포트를 열지 못한 채 조용히 멈춰버린다(직접 재현해서 확인, Node로
-    // 돌리면 정상). `bun run dev`도 cloudflare 타깃에선 같은 이유로 Node를 강제하는데
-    // (`shared/files/scripts/init.ts`의 DELTA 참고) 이건 그거랑 별개로, e2e는 타깃과
-    // 무관하게 처음부터 Node로 고정해뒀다.
+    // 3001: e2e와 별개로 돌아가는 dev 서버(3000)와 공존.
+    // node로 직접 돌리는 이유는 AGENTS.md §12 참고 — Bun의 ws 구현이 cloudflare 타깃의
+    // workerd 웹소켓 브리지를 못 받아서 포트가 안 열린다. e2e는 타깃 무관하게 항상 node.
     command: `node node_modules/vite/bin/vite.js dev --port ${PORT} --strictPort`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,

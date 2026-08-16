@@ -1,11 +1,6 @@
-/**
- * 공용 UI의 유일한 공개 표면. `src/common` 바깥에서는 전부 `@/common/components`에서
- * 가져온다 — 내부 파일을 직접 가리키지 않는다.
- *
- * `bun run ui:add <name>` 후에는 새로 생긴 export를 여기에 추가한다.
- */
+// `bun run ui:add <name>` 후에는 새로 생긴 export를 여기에 추가한다.
 
-// ── ui/ — 프리미티브. shadcn CLI가 생성한다. 손으로 고치지 않는다. ─────────────
+// ui/ — shadcn 생성 프리미티브. 손으로 고치지 않는다.
 export { Button, buttonVariants } from './ui/button';
 export {
   Card,
@@ -42,5 +37,5 @@ export { Label } from './ui/label';
 export { Separator } from './ui/separator';
 export { Skeleton } from './ui/skeleton';
 
-// ── layout/ — 앱을 아는 조합 컴포넌트. i18n·테마·라우터를 써도 된다. ──────────
+// layout/ — 앱을 아는 조합 컴포넌트. i18n·테마·라우터를 써도 된다.
 export { SiteHeader } from './layout/site-header';

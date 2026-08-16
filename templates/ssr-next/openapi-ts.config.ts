@@ -1,12 +1,8 @@
 import { defineConfig } from '@hey-api/openapi-ts';
 
 /**
- * `bun run gen:api` → `src/api/`.
- *
- * 기본 입력은 저장소에 들어있는 스펙이다. 그래서 코드젠이 오프라인에서 돌고,
- * 남의 데모 서버가 바뀌었다고 깨지는 일이 없다. 실제 백엔드로 바꾸려면 `.env`에 한 줄:
- *
- *   OPENAPI_INPUT=https://your.api/openapi.json
+ * `bun run gen:api` → `src/api/`. 기본 입력은 저장소에 든 로컬 스펙이라 오프라인에서 돈다.
+ * 실제 백엔드로 바꾸려면 `.env`에 `OPENAPI_INPUT=https://your.api/openapi.json` 한 줄.
  */
 export default defineConfig({
   input: process.env.OPENAPI_INPUT ?? './openapi/example.json',
@@ -17,8 +13,6 @@ export default defineConfig({
     '@hey-api/typescript',
     '@hey-api/client-fetch',
     'zod',
-    // `validator: true`가 HTTP 계층에서 응답을 파싱하므로,
-    // ViewModel이 SDK가 이미 검증한 걸 다시 파싱할 일이 없다.
     { name: '@hey-api/sdk', validator: true },
     '@tanstack/react-query',
   ],

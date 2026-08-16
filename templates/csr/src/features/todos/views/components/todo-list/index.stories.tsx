@@ -38,7 +38,6 @@ export const ErrorState: Story = {
   args: { isError: true },
 };
 
-/** `play()`가 있는 스토리는 `bun run test`에서 인터랙션 테스트로 그대로 실행된다. */
 export const TogglesAnItem: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
