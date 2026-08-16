@@ -9,6 +9,7 @@ dist-ssr
 .open-next
 .wrangler
 .vercel
+*.tsbuildinfo
 
 # 생성물(`src/api`, `src/@types`)은 **커밋한다.**
 #
