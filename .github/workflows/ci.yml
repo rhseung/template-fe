@@ -27,8 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # 템플릿이 추가되면 행을 늘린다: ssr-start
-        template: [csr, ssg, ssr-next]
+        template: [csr, ssg, ssr-next, ssr-start]
         target: [cloudflare, vercel]
     name: ${{ matrix.template }} / ${{ matrix.target }}
     runs-on: ubuntu-latest

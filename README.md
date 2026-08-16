@@ -20,7 +20,7 @@ bunx degit rhseung/template-fe/templates/csr my-app && cd my-app && bun run init
 | `ssg`       | 마케팅 사이트·문서·블로그. 콘텐츠가 주인공일 때    | 파일 기반       | 정적 + 아일랜드 |
 
 ```sh
-bunx degit rhseung/template-fe/templates/ssr-start my-app   # 준비 중
+bunx degit rhseung/template-fe/templates/ssr-start my-app
 bunx degit rhseung/template-fe/templates/ssr-next  my-app
 bunx degit rhseung/template-fe/templates/ssg       my-app
 ```
