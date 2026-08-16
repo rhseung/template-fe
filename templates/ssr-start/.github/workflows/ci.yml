@@ -1,0 +1,69 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run format
+      - run: bunx eslint . --max-warnings=0
+      - run: bun run typecheck
+
+      # 생성물이 커밋되어 있으므로 재생성은 no-op이어야 한다. 트리가 더러워지면
+      # 누군가 `t()` 키나 라우트를 추가했거나 API 스펙을 바꾸고 `bun run gen`을
+      # 안 돌린 것이다. `removeUnusedKeys` 덕에 유령 로케일 키도 같은 스텝에서 잡힌다.
+      #
+      # 참고: OPENAPI_INPUT이 살아있는 백엔드를 가리키면 이 스텝이 거기 닿아야 한다.
+      # 문제가 되면 `gen:i18n`만 따로 떼어낸다.
+      - run: bun run gen
+      - name: generated output is stale
+        run: git diff --exit-code || { echo '::error::run `bun run gen` and commit'; exit 1; }
+
+      # vitest가 스토리를 실제 브라우저에서 돌린다
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run test
+
+      - run: bun run build
+      - run: bun run build-storybook
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+
+      - run: bun install --frozen-lockfile
+      - run: bun run test:e2e:install
+      - run: bun run test:e2e
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

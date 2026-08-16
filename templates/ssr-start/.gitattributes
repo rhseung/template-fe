@@ -1,0 +1,7 @@
+# 이게 없으면 Windows 체크아웃이 모든 파일을 CRLF로 바꾸고, `bun run init`이 package.json을
+# LF로 다시 쓰면서 이후 모든 diff가 노이즈가 된다.
+* text=auto eol=lf
+
+bun.lock linguist-generated=true
+src/api/** linguist-generated=true
+*.gen.ts linguist-generated=true
