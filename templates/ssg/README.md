@@ -19,10 +19,6 @@ cp .env.example .env
 bun run dev          # http://localhost:4321 — MSW가 켜져 있어 백엔드 없이 돈다
 ```
 
-> Astro 7은 AI 에이전트 터미널을 감지하면 `astro dev`/`astro preview`를 백그라운드
-> 데몬으로 띄운다 — 명령이 바로 리턴되고 pid만 찍힌다. foreground로 고정하고 싶으면
-> `ASTRO_DEV_BACKGROUND=0 bun run dev`처럼 환경변수를 직접 붙인다.
-
 ## 명령어
 
 | 명령                       | 하는 일                                               |

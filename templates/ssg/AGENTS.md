@@ -24,11 +24,6 @@
 
 `typecheck`는 `tsc`가 아니라 `astro check`다 — `.astro` 파일은 tsc가 못 읽는다.
 
-Astro 7은 AI 에이전트 터미널을 감지하면 `astro dev`/`astro preview`를 백그라운드 데몬으로
-띄운다(명령이 바로 리턴되고 pid만 찍힘). foreground로 고정하고 싶으면
-`ASTRO_DEV_BACKGROUND=0 bun run dev`처럼 환경변수를 직접 붙인다. e2e(`playwright.config.ts`)는
-이 값을 이미 강제로 꺼둔다 — Playwright의 `webServer`는 foreground 프로세스를 전제해서다.
-
 ### 생성물은 손대지 않는다
 
 `src/api/`, `src/@types/`는 생성물이고 **커밋되어 있다**.
