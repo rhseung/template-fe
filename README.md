@@ -22,7 +22,7 @@ bunx degit rhseung/template-fe/templates/csr my-app && cd my-app && bun run init
 ```sh
 bunx degit rhseung/template-fe/templates/ssr-start my-app   # 준비 중
 bunx degit rhseung/template-fe/templates/ssr-next  my-app   # 준비 중
-bunx degit rhseung/template-fe/templates/ssg       my-app   # 준비 중
+bunx degit rhseung/template-fe/templates/ssg       my-app
 ```
 
 > degit은 비어 있지 않은 디렉토리를 거부한다. 덮어쓰려면 `--force`.
