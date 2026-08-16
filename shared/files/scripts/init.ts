@@ -379,6 +379,10 @@ await $`bun install`;
 
 if (!(await Bun.file('.git/HEAD').exists())) {
   await $`git init -b main`;
+  // git이 전역 user.name/email을 모르는 환경(CI, 새 머신)에서도 커밋되게 로컬로만 채운다.
+  // 이미 전역 설정이 있으면 `git config`가 그걸 덮어쓰지 않고 로컬 값을 추가할 뿐이다.
+  await $`git config user.email ${'init@template-fe.local'}`;
+  await $`git config user.name ${'template-fe init'}`;
   await $`git add -A`;
   await $`git commit -m ${`chore: init from template-fe/${template}`}`;
 }
