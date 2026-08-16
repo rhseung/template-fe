@@ -7,5 +7,8 @@
     "sync": "bun scripts/sync.ts",
     "check": "bun scripts/sync.ts --check",
     "format": "cd templates/csr && bunx --bun prettier --write --config prettier.config.js --ignore-path .prettierignore ../../shared ../../scripts ../../README.md"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0"
   }
 }
