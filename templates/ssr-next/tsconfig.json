@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.base.json",
+  // `.storybook`은 명시적 glob이 필요하다 — 아니면 tsc가 점 디렉토리를 건너뛴다.
+  // `scripts/`는 의도적으로 빠져 있다: `init.ts`는 Bun 전용이고 자기를 지운다.
+  // `next-env.d.ts`·`.next/types/**/*.ts`는 Next가 만드는/기대하는 표준 포함 목록.
+  "include": [
+    "src",
+    "e2e",
+    ".storybook/**/*.ts",
+    ".storybook/**/*.tsx",
+    "*.ts",
+    "*.js",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    // `msw-storybook-addon/csf3`가 preview와 스토리의 `parameters.msw` 타입을 잡아준다.
+    "types": ["node", "msw-storybook-addon/csf3"],
+    "allowJs": true,
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
+    // `baseUrl` 없음 — TS 6에서 deprecate됐다. `paths`는 이 파일 기준으로 해석된다.
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}

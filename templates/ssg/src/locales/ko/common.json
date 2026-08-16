@@ -1,0 +1,14 @@
+{
+  "actions": {
+    "switchLanguage": "언어 바꾸기",
+    "toggleTheme": "테마 바꾸기"
+  },
+  "app": {
+    "name": "template-fe / ssg"
+  },
+  "notFound": {
+    "action": "홈으로",
+    "description": "주소를 다시 확인해 주세요.",
+    "title": "페이지를 찾을 수 없습니다"
+  }
+}

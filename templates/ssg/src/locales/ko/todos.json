@@ -1,0 +1,27 @@
+{
+  "filter": {
+    "active": "남은 것",
+    "all": "전체",
+    "done": "끝낸 것",
+    "label": "필터"
+  },
+  "form": {
+    "label": "할 일",
+    "placeholder": "무엇을 해야 하나요?",
+    "submit": "추가"
+  },
+  "list": {
+    "empty": {
+      "description": "위 입력창에 첫 번째 할 일을 적어보세요.",
+      "title": "아직 할 일이 없습니다"
+    },
+    "error": {
+      "description": "잠시 후 다시 시도해 주세요.",
+      "title": "목록을 불러오지 못했습니다"
+    }
+  },
+  "page": {
+    "remaining": "{{value}}개 남음",
+    "title": "할 일"
+  }
+}

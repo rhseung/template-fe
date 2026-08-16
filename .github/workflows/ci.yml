@@ -1,0 +1,71 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  drift:
+    name: shared 설정 drift
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+      - run: bun run sync
+      # `git diff`가 손으로 쓸 만한 어떤 리포터보다 낫다 —
+      # 정확한 헝크, 로그에서 신택스 하이라이팅, 우리 코드 0줄.
+      - name: 템플릿이 shared/ 와 어긋남
+        run: git diff --exit-code || { echo '::error::run `bun run sync` and commit'; exit 1; }
+
+  template:
+    needs: drift
+    strategy:
+      fail-fast: false
+      matrix:
+        template: [csr, ssg, ssr-next, ssr-start]
+        target: [cloudflare, vercel]
+    name: ${{ matrix.template }} / ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: /tmp/app
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+
+      # degit 출력물을 바이트 단위로 재현한다 — 추적 파일만, `.git` 없이.
+      # 원본 체크아웃을 그냥 빌드하면 필요한 파일이 gitignore에 걸려 있어도 통과해버린다.
+      # 이렇게 해야 사용자 터미널이 아니라 여기서 터진다.
+      #
+      # `defaults.run.working-directory`는 `runner` 컨텍스트를 못 쓴다(워크플로 파싱
+      # 시점에 평가돼서 `runner.temp`가 아직 없다) — 그래서 `/tmp/app` 고정 경로를 쓴다.
+      - name: 템플릿 내보내기 (degit과 동일)
+        working-directory: ${{ github.workspace }}
+        run: |
+          mkdir -p /tmp/app
+          git archive HEAD "templates/${{ matrix.template }}" \
+            | tar -x -C /tmp/app --strip-components=2
+
+      - uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ matrix.template }}-${{ hashFiles(format('templates/{0}/bun.lock', matrix.template)) }}
+          restore-keys: bun-${{ runner.os }}-${{ matrix.template }}-
+
+      - run: bun install --frozen-lockfile
+
+      # 여기서 init을 돌리는 게 init을 검증하는 유일한 수단이다 —
+      # 어차피 타깃별 플러그인이 있어야 build가 되므로 build 전에 돌려야 한다.
+      - run: bun run init --yes --target=${{ matrix.target }} --name=ci-${{ matrix.template }}
+
+      - run: bunx eslint . --max-warnings=0
+      - run: bun run typecheck
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run test
+      - run: bun run build
+      - run: bun run build-storybook

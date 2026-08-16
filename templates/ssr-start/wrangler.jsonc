@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ssr-start",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+  // TanStack Start의 기본 서버 엔트리. `src/server.ts`로 커스터마이즈하기 전엔 이 값 그대로.
+  "main": "@tanstack/react-start/server-entry",
+  "observability": { "enabled": true },
+}

@@ -1,0 +1,14 @@
+{
+  "actions": {
+    "switchLanguage": "Switch language",
+    "toggleTheme": "Toggle theme"
+  },
+  "app": {
+    "name": "template-fe / ssr-start"
+  },
+  "notFound": {
+    "action": "Back to home",
+    "description": "Check the address and try again.",
+    "title": "Page not found"
+  }
+}

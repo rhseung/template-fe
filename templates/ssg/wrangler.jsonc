@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ssg",
+  "compatibility_date": "2026-08-01",
+  // Astro `output: 'static'` 빌드는 정적 파일일 뿐이다. Worker 스크립트도 `main`도 없다 —
+  // Cloudflare가 `dist/`를 직접 서빙한다.
+  "assets": {
+    "directory": "./dist",
+  },
+  "observability": { "enabled": true },
+}

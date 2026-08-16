@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.base.json",
+  // `.storybook`은 명시적 glob이 필요하다 — 아니면 tsc가 점 디렉토리를 건너뛴다.
+  // `.astro` 파일은 tsc가 아니라 `astro check`가 본다 (astro/tsconfigs가 그 통합을 담당).
+  "include": ["src", "e2e", ".storybook/**/*.ts", ".storybook/**/*.tsx", "*.ts", "*.js"],
+  "compilerOptions": {
+    // `msw-storybook-addon/csf3`가 preview와 스토리의 `parameters.msw` 타입을 잡아준다.
+    // `astro/client`는 `.astro`가 아닌 `.ts`/`.tsx`에서 에셋 import 등을 타입으로 알게 한다.
+    "types": ["astro/client", "vite/client", "node", "msw-storybook-addon/csf3"],
+    // `baseUrl` 없음 — TS 6에서 deprecate됐다. `paths`는 이 파일 기준으로 해석된다.
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}

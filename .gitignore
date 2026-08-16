@@ -1,9 +1,35 @@
-node_modules
+# 이 파일은 최소한으로, 정확하게 유지한다.
+#
+# 템플릿은 degit으로 배포되고, degit은 git이 추적하는 것만 그대로 내보낸다. 여기 규칙이
+# 템플릿 소스 파일에 실수로 걸리면 로컬에서는 빌드되는데 degit한 모든 사람에게서 깨진다.
+# CI가 `git archive`로 내보낸 뒤 빌드해서 막고 있지만, 애초에 욕심 많은 패턴을 안 쓰는 게 제일 싸다.
+
+node_modules/
 .DS_Store
-dist
-dist-ssr
-*.local
-count.txt
+
+# 빌드 산출물
+dist/
+.output/
+.vercel/
+.wrangler/
+.open-next/
+storybook-static/
+
+# 테스트 산출물
+coverage/
+playwright-report/
+test-results/
+blob-report/
+.playwright-mcp/
+
+# env — `.env.example`은 의도적으로 추적한다
 .env
-.nitro
-.tanstack
+.env.*
+!.env.example
+
+# templates/ 아래는 의도적으로 아무것도 적지 않는다. 각 템플릿이 자기 .gitignore를 갖고
+# 있고 git이 그걸 적용한다. 루트에 규칙을 중복하면 템플릿 파일이 조용히 배포에서 빠진다 —
+# 여기의 디렉토리 무시는 저기의 negation으로 되돌릴 수 없다.
+# CI의 `git archive` 스텝이 정확히 그걸 잡으려고 있다.
+
+*.log

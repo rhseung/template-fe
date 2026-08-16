@@ -1,0 +1,27 @@
+{
+  "filter": {
+    "active": "Active",
+    "all": "All",
+    "done": "Done",
+    "label": "Filter"
+  },
+  "form": {
+    "label": "Todo",
+    "placeholder": "What needs doing?",
+    "submit": "Add"
+  },
+  "list": {
+    "empty": {
+      "description": "Add your first todo in the field above.",
+      "title": "Nothing here yet"
+    },
+    "error": {
+      "description": "Please try again in a moment.",
+      "title": "Could not load the list"
+    }
+  },
+  "page": {
+    "remaining": "{{value}} left",
+    "title": "Todos"
+  }
+}

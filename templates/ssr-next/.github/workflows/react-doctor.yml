@@ -1,0 +1,28 @@
+# 결정론적 React 진단 — 상태·이펙트, 성능, 아키텍처, 보안, 접근성.
+# 이 PR이 새로 넣은 것만 보고하므로 기존 백로그에 파묻히지 않는다.
+#
+# 시크릿도, install도, build 스텝도 없다. 액션이 내장 GITHUB_TOKEN을 쓰고 필요한 걸 알아서 깐다.
+# 설정은 `doctor.config.json`, 또는 액션 입력(`blocking`, `scope`, `comment`, `commit-status`).
+name: react-doctor
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  statuses: write
+
+concurrency:
+  group: react-doctor-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  react-doctor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # diff 기준점이 필요하다
+      - uses: millionco/react-doctor@v2
