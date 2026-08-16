@@ -82,6 +82,28 @@ export default defineCloudflareConfig();
     },
     none: {},
   },
+  'ssr-start': {
+    cloudflare: {
+      dev: { '@cloudflare/vite-plugin': '1.52.1', wrangler: '4.123.0' },
+      // `@cloudflare/vite-plugin`이 로컬 workerd로 가는 웹소켓 브리지를 붙이는데, Bun의
+      // `ws` 구현이 그 브리지가 쓰는 'upgrade' 이벤트를 지원하지 않아서 `bun run dev`가
+      // 포트를 절대 못 연다 — `node`로 직접 vite를 돌리면 정상 동작한다(직접 재현해서 확인함).
+      scripts: {
+        dev: 'node node_modules/vite/bin/vite.js dev --port 3000',
+        preview: 'node node_modules/vite/bin/vite.js preview --port 3000',
+        deploy: 'bun run build && wrangler deploy',
+      },
+      keep: ['wrangler.jsonc'],
+    },
+    // Nitro가 Vercel 배포를 맡는다 — 2026-08 기준 `nitro`가 여전히 베타(3.0.260610-beta)라
+    // 다른 세 템플릿보다 프로덕션 신뢰도가 낮다. `templates/ssr-start/README.md` 참고.
+    vercel: {
+      dev: { nitro: '3.0.260610-beta' },
+      scripts: { deploy: 'vercel deploy --prod' },
+      keep: [],
+    },
+    none: {},
+  },
 };
 
 /** 템플릿마다 다른 예제(todos) 삭제 절차. 파일 경로는 다르지만 스텁 내용은 공유한다. */
@@ -192,6 +214,34 @@ import Layout from '@/layouts/base-layout.astro';
       'src/common/lib/i18n.ts': I18N_STUB_NO_EXAMPLE,
       'src/mocks/handlers.ts': MOCKS_STUB_NO_EXAMPLE,
       'src/app/page.tsx': `export default function Home() {
+  return (
+    <main className="flex min-h-dvh items-center justify-center">
+      <h1 className="text-2xl font-semibold tracking-tight">Hello</h1>
+    </main>
+  );
+}
+`,
+    },
+  },
+  'ssr-start': {
+    remove: [
+      'src/features/todos',
+      'src/routes/todos.tsx',
+      'src/locales/ko/todos.json',
+      'src/locales/en/todos.json',
+      'e2e/todos.spec.ts',
+      'openapi/example.json',
+    ],
+    write: {
+      'src/common/lib/i18n.ts': I18N_STUB_NO_EXAMPLE,
+      'src/mocks/handlers.ts': MOCKS_STUB_NO_EXAMPLE,
+      'src/routes/index.tsx': `import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/')({
+  component: Home,
+});
+
+function Home() {
   return (
     <main className="flex min-h-dvh items-center justify-center">
       <h1 className="text-2xl font-semibold tracking-tight">Hello</h1>
