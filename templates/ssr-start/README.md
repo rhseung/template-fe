@@ -58,9 +58,9 @@ src/
 Model은 항상 최하위다. 어기면 한국어 에러 메시지가 고치는 법까지 알려준다.
 
 `routes/__root.tsx`의 `RootDocument`는 마운트 전엔 아무것도 안 그린다. 서버엔
-`navigator`가 없어 언어 감지가 클라이언트와 달라지고 MSW도 비동기로 뜨기 때문에,
-서버·클라이언트 첫 렌더를 강제로 맞춰둔 것이다. 대신 자바스크립트가 실행되기 전까진
-빈 화면이라는 트레이드오프를 감수한다. 자세한 내용은 [`AGENTS.md`](./AGENTS.md).
+`navigator`가 없어 언어 감지가 클라이언트와 달라지고 MSW도 비동기로 뜬다. 서버·클라이언트
+첫 렌더를 강제로 맞춰둔 이유다. 대신 자바스크립트가 실행되기 전까진 빈 화면이라는
+트레이드오프를 감수한다. 자세한 내용은 [`AGENTS.md`](./AGENTS.md).
 
 자세한 규약은 [`AGENTS.md`](./AGENTS.md) — 사람과 AI 어시스턴트가 같은 파일을 읽는다.
 
@@ -79,8 +79,8 @@ rm -rf src/features/todos src/routes/todos.tsx src/locales/*/todos.json \
 
 ## 생성물에 대하여
 
-`src/api/`, `src/@types/`, `src/routeTree.gen.ts`는 **생성물이지만 커밋한다.** Bun이
-루트 패키지의 `prepare`·`postinstall`을 실행하지 않기 때문에, 설치 시 재생성 훅은
+`src/api/`, `src/@types/`, `src/routeTree.gen.ts`는 **생성물이지만 커밋한다.** Bun은
+루트 패키지의 `prepare`·`postinstall`을 실행하지 않는다. 그래서 설치 시 재생성 훅은
 조용히 아무것도 안 하고 새로 클론한 사람은 `bun dev`가 깨진 상태로 만난다.
 
 대신 CI가 `bun run gen` 후 `git diff --exit-code`로 체크인된 파일이 최신인지 검증한다.
@@ -117,7 +117,7 @@ VITE_ENABLE_MSW=false
 ## AI 코드리뷰
 
 아무것도 안 해도 되는 쪽부터: [CodeRabbit](https://github.com/marketplace/coderabbitai)
-GitHub App만 설치하면 끝난다. 공개 레포는 영구 무료고 설정 파일도 시크릿도 필요 없고,
+GitHub App만 설치하면 끝난다. 공개 레포는 영구 무료고 설정 파일도 시크릿도 필요 없다.
 포크 PR까지 리뷰해준다.
 
 Claude로 하고 싶으면 조금 더 손이 간다. `claude setup-token`으로 `CLAUDE_CODE_OAUTH_TOKEN`

@@ -7,7 +7,7 @@ bunx degit rhseung/template-fe/templates/ssr-next my-app && cd my-app && bun run
 ```
 
 `bun run init`은 한 번만 돌고 자기 자신을 지운다. 아래 `<!-- template -->` 위쪽은
-그때 잘려나가고, 아래쪽만 프로젝트 README로 남는다.
+그때 잘려나가고 아래쪽만 프로젝트 README로 남는다.
 
 <!-- template -->
 
@@ -58,10 +58,10 @@ Model은 항상 최하위다. 어기면 한국어 에러 메시지가 고치는 
 
 `features/todos`의 page 컴포넌트와 그 배럴 체인엔 전부 `'use client'`가 붙어 있다.
 App Router에서 서버 컴포넌트가 클라이언트 컴포넌트를 직접 import하려면 그 컴포넌트
-자신에게 지시어가 필요한데, `index.ts` 배럴을 거치는 경우엔 Next의 알려진 버그 때문에
-그 배럴들에도 똑같이 지시어를 달아야 한다. 하위 컴포넌트(`TodoForm`, `TodoList`,
-`SiteHeader`)는 지시어 없이도 같은 클라이언트 번들에 자동으로 딸려온다. 자세한 판단
-기준은 [`AGENTS.md`](./AGENTS.md).
+자신에게 지시어가 필요하다. `index.ts` 배럴을 거칠 땐 Next의 알려진 버그 탓에 배럴
+쪽에도 똑같이 달아야 한다. 하위 컴포넌트(`TodoForm`, `TodoList`, `SiteHeader`)는
+지시어 없이도 같은 클라이언트 번들에 자동으로 딸려온다. 자세한 판단 기준은
+[`AGENTS.md`](./AGENTS.md).
 
 자세한 규약은 [`AGENTS.md`](./AGENTS.md) — 사람과 AI 어시스턴트가 같은 파일을 읽는다.
 
@@ -80,9 +80,9 @@ rm -rf src/features/todos src/app/todos src/locales/*/todos.json \
 
 ## 생성물에 대하여
 
-`src/api/`, `src/@types/`는 **생성물이지만 커밋한다.** Bun이 루트 패키지의
-`prepare`·`postinstall`을 실행하지 않기 때문에, 설치 시 재생성 훅은 조용히 아무것도
-안 하고 새로 클론한 사람은 `bun dev`가 깨진 상태로 만난다.
+`src/api/`, `src/@types/`는 **생성물이지만 커밋한다.** Bun은 루트 패키지의
+`prepare`·`postinstall`을 실행하지 않는다. 설치할 때 재생성 훅이 조용히 아무것도 안
+하니, 새로 클론한 사람은 깨진 `bun dev`를 만난다.
 
 대신 CI가 `bun run gen` 후 `git diff --exit-code`로 체크인된 파일이 최신인지 검증한다.
 손으로 고치지 말 것 — 다음 `bun run gen`에 사라진다. 에디터에서도 읽기 전용으로 잠가뒀다.
@@ -116,13 +116,13 @@ NEXT_PUBLIC_ENABLE_MSW=false
 ## AI 코드리뷰
 
 아무것도 안 해도 되는 쪽부터: [CodeRabbit](https://github.com/marketplace/coderabbitai)
-GitHub App만 설치하면 끝난다. 공개 레포는 영구 무료고 설정 파일도 시크릿도 필요 없고,
+GitHub App만 설치하면 끝난다. 공개 레포는 영구 무료고 설정 파일도 시크릿도 필요 없고
 포크 PR까지 리뷰해준다.
 
 Claude로 하고 싶으면 조금 더 손이 간다. `claude setup-token`으로 `CLAUDE_CODE_OAUTH_TOKEN`
 시크릿을 만들고 레포 변수에 `ENABLE_CLAUDE_REVIEW=true`를 추가하면 된다
 (`.github/workflows/review.yml` 참고).
 
-공짜로 하나 더 얹고 싶으면 Settings → Code security에서 CodeQL default setup만 켜면 된다.
+공짜로 하나 더 얹고 싶으면 Settings → Code security에서 CodeQL default setup만 켜면 그만이다.
 
 `react-doctor.yml`은 시크릿이 필요 없어서 애초에 켜져 있다.
