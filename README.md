@@ -7,8 +7,8 @@
 bunx degit rhseung/template-fe/templates/csr my-app && cd my-app && bun run init
 ```
 
-`bun run init`이 프로젝트명·배포 타겟·예제 유지 여부를 물어보고, 설정을 맞춘 뒤
-자기 자신을 지우고 `bun install`까지 돌린다. 그 다음은 `bun dev`.
+`bun run init`이 프로젝트명·배포 타겟·예제 유지 여부를 물어보고 설정을 맞춘 뒤
+자기 자신을 지우고 `bun install`까지 돌린다. 그다음은 `bun dev`.
 
 ## 어느 걸 고를까
 
@@ -34,7 +34,7 @@ bunx degit rhseung/template-fe/templates/ssg       my-app
 - **백엔드는 OpenAPI 스펙 하나면 붙는다.** Hey API가 타입·클라이언트·zod·react-query 훅을 한 번에 생성한다.
 - i18n은 i18next-cli가 돌린다. `t()` 호출에서 키를 뽑고 `src/@types`에 타입까지 만든다. ko 먼저, en 나중.
 - UI는 shadcn/ui(`base-nova` / Base UI) + Tailwind v4 CSS-first + Phosphor 아이콘.
-- **Storybook 스토리가 곧 테스트다.** 테마·로케일 툴바 데코레이터 포함, vitest 브라우저 프로젝트로 실행된다.
+- **Storybook 스토리가 곧 테스트다.** 테마·로케일 툴바 데코레이터가 붙어 있고 vitest 브라우저 프로젝트로 실행된다.
 - Playwright e2e와 MSW가 같이 온다 — 백엔드 없이 `bun dev`가 돈다.
 - ESLint는 엄격하다. kebab-case, named export만, 배럴 경유 import, React Compiler 룰까지.
 - CI는 lint/typecheck/test/build/storybook을 다 돌리고, [react-doctor](https://react.doctor)가 PR을 스캔한다.
@@ -63,8 +63,8 @@ bun run check   # drift 검사만 (CI가 쓰는 것)
 `package.json`에 딥머지되고, 템플릿 고유 키는 그대로 살아남는다.
 
 `eslint.config.js`와 `tsconfig.json`은 전체 복사가 아니라 **base 파일 + 얇은 래퍼**다.
-flat config는 그냥 배열이고 tsconfig엔 `extends`가 있으니, 네이티브 기능을 쓴다.
+flat config는 그냥 배열이고 tsconfig엔 `extends`가 있으니 네이티브 기능을 쓴다.
 
 > `sync`는 추가·덮어쓰기만 한다. `package.base.json`에서 의존성을 지워도 템플릿에서
-> 사라지지 않으니 손으로 지운다. 1년에 한 번 있는 일을 위해 영구 관리 대상인
-> remove 목록을 만드는 것보다 싸다.
+> 사라지지 않으니 손으로 지운다. 1년에 한 번 있는 일 때문에 remove 목록을 만들어
+> 계속 관리하는 것보다 싸다.
