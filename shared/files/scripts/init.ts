@@ -20,6 +20,12 @@ type Delta = {
   scripts?: Record<string, string>;
   /** 남길 타깃 전용 파일. TARGET_FILES 중 나머지는 삭제된다. */
   keep?: string[];
+  /**
+   * 이 타깃에서만 새로 쓰는 파일. `open-next.config.ts`처럼 그 타깃 전용 패키지를
+   * import하는 파일은 커밋해두면 다른 타깃/`target=none` 기본 상태에서 타입체크가
+   * 깨진다 — 그래서 파일 자체를 커밋하지 않고 `init`이 이 타깃을 고를 때만 만든다.
+   */
+  write?: Record<string, string>;
 };
 
 /**
@@ -50,6 +56,29 @@ const DELTA: Record<string, Record<Target, Delta>> = {
     vercel: {
       scripts: { deploy: 'vercel deploy --prod' },
       keep: ['vercel.json'],
+    },
+    none: {},
+  },
+  'ssr-next': {
+    // Vercel은 Next를 네이티브로 인식한다 — 어댑터도 `vercel.json`도 없다.
+    cloudflare: {
+      dev: { '@opennextjs/cloudflare': '1.20.2', wrangler: '4.120.0' },
+      scripts: {
+        preview: 'opennextjs-cloudflare build && opennextjs-cloudflare preview',
+        deploy: 'opennextjs-cloudflare build && opennextjs-cloudflare deploy',
+      },
+      keep: ['wrangler.jsonc'],
+      write: {
+        'open-next.config.ts': `import { defineCloudflareConfig } from '@opennextjs/cloudflare';
+
+// R2 증분 캐시 등이 필요해지면 https://opennext.js.org/cloudflare/caching 참고해서 추가한다.
+export default defineCloudflareConfig();
+`,
+      },
+    },
+    vercel: {
+      scripts: { deploy: 'vercel deploy --prod' },
+      keep: [],
     },
     none: {},
   },
@@ -150,6 +179,28 @@ import Layout from '@/layouts/base-layout.astro';
 `,
     },
   },
+  'ssr-next': {
+    remove: [
+      'src/features/todos',
+      'src/app/todos',
+      'src/locales/ko/todos.json',
+      'src/locales/en/todos.json',
+      'e2e/todos.spec.ts',
+      'openapi/example.json',
+    ],
+    write: {
+      'src/common/lib/i18n.ts': I18N_STUB_NO_EXAMPLE,
+      'src/mocks/handlers.ts': MOCKS_STUB_NO_EXAMPLE,
+      'src/app/page.tsx': `export default function Home() {
+  return (
+    <main className="flex min-h-dvh items-center justify-center">
+      <h1 className="text-2xl font-semibold tracking-tight">Hello</h1>
+    </main>
+  );
+}
+`,
+    },
+  },
 };
 
 const TARGET_FILES = ['wrangler.jsonc', 'vercel.json', 'open-next.config.ts', 'public/_headers'];
@@ -226,6 +277,10 @@ if (delta.keep?.includes('wrangler.jsonc')) {
     'wrangler.jsonc',
     wrangler.replace(/"name":\s*"[^"]*"/, `"name": ${JSON.stringify(name)}`),
   );
+}
+
+for (const [path, content] of Object.entries(delta.write ?? {})) {
+  await Bun.write(path, content);
 }
 
 // 4 — README: 템플릿 서문을 떼고 실제 문서만 남긴다
