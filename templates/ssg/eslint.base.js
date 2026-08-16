@@ -61,6 +61,8 @@ export default defineConfig(
       'coverage',
       // 프레임워크별 생성 캐시 (Astro, TanStack Start, Next.js…). 템플릿에 없으면 매칭 안 될 뿐이다.
       '.astro/**',
+      '.next/**',
+      '.open-next/**',
       'src/api/**',
       'src/@types/**',
       '**/*.gen.ts',
