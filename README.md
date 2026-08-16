@@ -21,7 +21,7 @@ bunx degit rhseung/template-fe/templates/csr my-app && cd my-app && bun run init
 
 ```sh
 bunx degit rhseung/template-fe/templates/ssr-start my-app   # 준비 중
-bunx degit rhseung/template-fe/templates/ssr-next  my-app   # 준비 중
+bunx degit rhseung/template-fe/templates/ssr-next  my-app
 bunx degit rhseung/template-fe/templates/ssg       my-app
 ```
 
