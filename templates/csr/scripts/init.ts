@@ -334,8 +334,10 @@ for (const [path, content] of Object.entries(delta.write ?? {})) {
 }
 
 // 4 — README: 템플릿 서문을 떼고 실제 문서만 남긴다
+// 마커를 설명하는 문장 안에도 `<!-- template -->`가 백틱으로 인용돼서 한 번 더 나온다 —
+// 일반 split이면 그 인라인 인용에서 잘려버리므로, 마커 혼자 있는 줄에서만 끊는다.
 const readme = await Bun.file('README.md').text();
-const body = (readme.split('<!-- template -->')[1] ?? '').trim();
+const body = (readme.split(/^<!-- template -->\s*$/m)[1] ?? '').trim();
 // 제목 뒤에 빈 줄 정확히 하나. 아니면 첫 실행부터 `bun run format`이 실패하는데,
 // 첫인상으로는 최악이다.
 await Bun.write('README.md', `# ${name}\n\n${body}\n`);
