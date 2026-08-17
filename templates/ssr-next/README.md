@@ -78,7 +78,7 @@ rm -rf src/features/todos src/app/todos src/locales/*/todos.json \
 `'todos'` 제거, `src/mocks/handlers.ts` 비우기. `src/app/page.tsx`는 `/todos`로
 리다이렉트하는 대신 직접 화면을 그리도록 다시 쓴다.
 
-## 생성물에 대하여
+## 생성물
 
 `src/api/`, `src/@types/`는 **생성물이지만 커밋한다.** Bun은 루트 패키지의
 `prepare`·`postinstall`을 실행하지 않는다. 설치할 때 재생성 훅이 조용히 아무것도 안

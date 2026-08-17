@@ -74,7 +74,7 @@ rm -rf src/features/todos src/pages/_islands/todos-island.tsx src/locales/*/todo
 `'todos'` 제거, `src/mocks/handlers.ts` 비우기. `src/pages/index.astro`는 새 아일랜드를
 가리키도록 다시 쓴다.
 
-## 생성물에 대하여
+## 생성물
 
 `src/api/`, `src/@types/`는 **생성물이지만 커밋한다.** Bun이 루트 패키지의
 `prepare`·`postinstall`을 실행하지 않기 때문에, 설치 시 재생성 훅은 조용히 아무것도

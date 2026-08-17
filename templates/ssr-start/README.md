@@ -77,7 +77,7 @@ rm -rf src/features/todos src/routes/todos.tsx src/locales/*/todos.json \
 `'todos'` 제거, `src/mocks/handlers.ts` 비우기. `src/routes/index.tsx`는 `/todos`로
 리다이렉트하는 대신 직접 화면을 그리도록 다시 쓴다.
 
-## 생성물에 대하여
+## 생성물
 
 `src/api/`, `src/@types/`, `src/routeTree.gen.ts`는 **생성물이지만 커밋한다.** Bun은
 루트 패키지의 `prepare`·`postinstall`을 실행하지 않는다. 그래서 설치 시 재생성 훅은

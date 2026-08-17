@@ -67,7 +67,7 @@ rm -rf src/features/todos src/routes/todos.tsx src/locales/*/todos.json \
 그다음 세 군데만 손보면 끝이다 — `src/common/lib/i18n.ts`의 `I18N_NAMESPACES`에서
 `'todos'` 제거, `src/mocks/handlers.ts` 비우기, `src/routes/index.tsx`의 리다이렉트 제거.
 
-## 생성물에 대하여
+## 생성물
 
 `src/api/`, `src/@types/`, `src/routeTree.gen.ts`는 **생성물이지만 커밋한다.**
 Bun이 루트 패키지의 `prepare`·`postinstall`을 실행하지 않아 설치 시 재생성 훅은 조용히
