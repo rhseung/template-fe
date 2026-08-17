@@ -27,7 +27,7 @@ bunx degit rhseung/template-fe/templates/ssg       my-app
 
 > degit은 비어 있지 않은 디렉토리를 거부한다. 덮어쓰려면 `--force`.
 
-## 공통으로 들어있는 것
+## 공통 기능
 
 - **MVVM을 린트로 강제한다.** `eslint-plugin-boundaries`가 View→Model 직접 접근, ViewModel→View 참조를 에러로 막는다.
 - 구조는 `src/features/<name>/{models,viewmodels,views}` + 루트 배럴 없는 `src/common/`.
