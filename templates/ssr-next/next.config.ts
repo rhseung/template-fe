@@ -11,5 +11,8 @@ const nextConfig: NextConfig = {};
 export default nextConfig;
 
 // #if cloudflare
-// initOpenNextCloudflareForDev();
+// // Storybook(`@storybook/nextjs-vite`)이 이 설정 파일을 불러오는데, 가드 없이 그냥
+// // 두면 `bun run test`(vitest) 때도 로컬 workerd dev 런타임이 뜬다 — `next dev`
+// // 전용 훅이라 테스트 프로세스 안에서 돌면 SQLite 락 충돌로 죽는다.
+// if (!process.env.VITEST) initOpenNextCloudflareForDev();
 // #endif
