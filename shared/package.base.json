@@ -27,7 +27,8 @@
     "i18n:lint": "i18next-cli lint",
     "msw:init": "msw init ./public --save",
     "ui:add": "bunx --bun shadcn@latest add",
-    "init": "bun scripts/init.ts"
+    "init": "bun scripts/init.ts",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -56,6 +57,7 @@
     "eslint-plugin-storybook": "10.5.7",
     "eslint-plugin-unused-imports": "4.4.1",
     "globals": "17.9.0",
+    "husky": "9.1.7",
     "i18next-cli": "1.67.9",
     "jsdom": "30.0.1",
     "msw": "2.15.0",

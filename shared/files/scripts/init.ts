@@ -386,4 +386,9 @@ if (!(await Bun.file('.git/HEAD').exists())) {
   await $`git commit -m ${`chore: init from template-fe/${template}`}`;
 }
 
+// Bun은 root 패키지의 `prepare` 스크립트를 실행하지 않는다 (src/api 같은 생성물을
+// 커밋해두는 이유와 같은 제약) — husky의 표준 설치 경로가 여기서 조용히 죽으므로
+// hooksPath를 직접 건다. `.husky/pre-commit`은 이미 파일로 커밋돼 있다.
+await $`git config core.hooksPath .husky`;
+
 console.log(`\n  ${name} ready → bun dev\n`);

@@ -18,7 +18,7 @@
 | `bun run dev`       | 개발 (:3000, MSW 켜짐)                        |
 | `bun run storybook` | 컴포넌트 작업 (:6006)                         |
 | `bun run check`     | **커밋 전** — prettier --write + eslint --fix |
-| `bun run verify`    | **PR 전** — format+lint+typecheck+doctor+test |
+| `bun run verify`    | **커밋마다 자동** — pre-commit 훅(husky). format+lint+typecheck+doctor+test |
 | `bun run gen`       | 스펙/키/라우트를 바꾼 뒤                      |
 | `bun run ui:add`    | shadcn 컴포넌트 추가                          |
 
@@ -264,7 +264,9 @@ CI는 `bun run gen` 후 `git diff --exit-code`로 JSON이 최신인지 검증한
 
 ## 9. Commits & PRs
 
-`<type>: <title>`, 명령형. PR 전에 `bun run verify`.
+`<type>: <title>`, 명령형. `bun run verify`는 pre-commit 훅(husky)이 커밋마다 돈다 —
+급하면 `git commit --no-verify`. 새로 clone한 직후엔 훅이 안 걸려 있을 수 있다
+(Bun이 `prepare` 스크립트를 안 돌린다) — `git config core.hooksPath .husky` 한 번.
 
 **커밋 하나에 변경 하나.** 판정은 `git diff --staged` 로 한다 - 스테이지한 변경이 서로
 독립적으로 되돌려질 수 있으면 커밋 두 개다. 리팩터와 기능, 서식과 로직을 같이 담지 않는다.

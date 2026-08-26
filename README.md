@@ -37,7 +37,9 @@ bunx degit rhseung/template-fe/templates/ssg       my-app
 - **Storybook 스토리가 곧 테스트다.** 테마·로케일 툴바 데코레이터가 붙어 있고 vitest 브라우저 프로젝트로 실행된다.
 - Playwright e2e와 MSW가 같이 온다 — 백엔드 없이 `bun dev`가 돈다.
 - ESLint는 엄격하다. kebab-case, named export만, 배럴 경유 import, React Compiler 룰까지.
-- CI는 lint/typecheck/test/build/storybook을 다 돌리고, [react-doctor](https://react.doctor)가 PR을 스캔한다.
+- lint/typecheck/test는 pre-commit 훅(husky, `bun run verify`)이 커밋마다 돈다. CI는 build/storybook/e2e만
+  맡고, [react-doctor](https://react.doctor)가 PR을 스캔한다. 배포는 Cloudflare Pages/Vercel의 git 연동이
+  알아서 한다 — 별도 배포 워크플로는 없다.
 - `AGENTS.md` 하나를 Claude Code, Cursor, Copilot이 전부 읽는다.
 
 ## 유지보수
