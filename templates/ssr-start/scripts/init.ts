@@ -313,12 +313,9 @@ for (const file of CONFIG_FILES) {
   );
 }
 
-// 3 — 타깃 전용 파일과 선택되지 않은 배포 워크플로 정리
+// 3 — 타깃 전용 파일 정리
 for (const file of TARGET_FILES) {
   if (!delta.keep?.includes(file)) await rm(file, { force: true });
-}
-for (const other of ['cloudflare', 'vercel']) {
-  if (other !== target) await rm(`.github/workflows/deploy-${other}.yml`, { force: true });
 }
 
 if (delta.keep?.includes('wrangler.jsonc')) {
