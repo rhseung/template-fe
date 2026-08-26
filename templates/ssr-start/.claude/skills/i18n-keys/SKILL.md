@@ -37,14 +37,23 @@ resources: {
 
 ## 키가 사라지는 두 가지 경우
 
-**동적 키.** 셀렉터는 함수라 애초에 문자열 보간이 안 된다 — `t($ => $[x])` 같은 건 타입도,
-추출도 안 통한다. 정적 조회로 바꾼다:
+**동적 키.** 유한한 유니온이면 그냥 셀렉터 안에서 인덱싱한다. 추출기가 타입을 읽고
+가능한 변형을 전부 펼쳐서 JSON에 넣는다(i18next-cli 1.49+, 템플릿은 그보다 위):
 
 ```tsx
-const label: Record<Filter, string> = {
-  all: t(($) => $.filter.all),
-  active: t(($) => $.filter.active),
-};
+type Filter = 'all' | 'active' | 'completed';
+t(($) => $.filter[f]); // filter.all / filter.active / filter.completed 세 개가 생긴다
+```
+
+템플릿 리터럴에 섞인 유니온·삼항, `as const` 맵도 같은 방식으로 펼쳐진다.
+타입체크도 통과하니 `Record`로 늘어놓을 이유가 없다.
+
+키가 정말 런타임에만 정해질 때만(서버가 주는 id처럼 타입이 `string`) 추출이 불가능하다.
+그때는 JSON에 키를 직접 심고 `i18next.config.ts`의 `extract.preservePatterns`로
+`removeUnusedKeys`에서 지켜낸다 — 여기 없는 키는 다음 실행에 지워진다:
+
+```ts
+preservePatterns: ['runtime.*.name'],
 ```
 
 **주석.** `extractFromComments`가 켜져 있다. 주석 안에 번역 호출을 써두면 JSON에 진짜 키가 생긴다.
@@ -52,7 +61,8 @@ const label: Record<Filter, string> = {
 
 ## 도구가 JSON을 소유한다
 
-`src/locales/**`를 손으로 열지 않는다. 키 이름을 바꿀 때도 마찬가지다:
+`src/locales/**`를 손으로 열지 않는다. 키 이름을 바꿀 때도 마찬가지다
+(예외는 위의 `preservePatterns` 키뿐이다 — 호출부가 없으니 사람이 심는 수밖에 없다):
 
 ```sh
 bunx i18next-cli rename-key todos:form.submit todos:form.add   # 소스 + JSON 동시에 (rename-key는 ns:key 형태 유지)
