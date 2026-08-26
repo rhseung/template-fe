@@ -3,6 +3,11 @@
   "name": "ssr-next",
   "compatibility_date": "2026-08-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  // Workers Builds(git 연동)는 이 파일의 `build.command`를 무시한다 — 락파일을 그대로
+  // 쓰게 하려면 대시보드에서 직접: Settings > Build > Build Variables에
+  // SKIP_DEPENDENCY_INSTALL=1을 추가하고, Build command를
+  // "bun install --frozen-lockfile && bun run build"로 바꾼다.
+  //
   // OpenNext가 Next를 Worker용 번들로 다시 패키징한 산출물. `dist/`가 아니다.
   "main": ".open-next/worker.js",
   "assets": {

@@ -91,8 +91,15 @@ VITE_ENABLE_MSW=false
 
 ## 배포
 
-`bun run init`이 고른 타겟에 맞춰 `wrangler.jsonc` 또는 `vercel.json` 하나만 남기고,
-`.github/workflows/deploy-*.yml`도 하나만 남긴다. 필요한 시크릿은 그 워크플로 상단에.
+`bun run init`이 고른 타겟에 맞춰 `wrangler.jsonc` 또는 `vercel.json` 하나만 남긴다.
+배포는 각 플랫폼의 git 연동이 push마다 알아서 한다 — 별도 GHA 워크플로는 없다.
+
+- **Vercel** — `vercel.json`의 `installCommand`가 `bun install --frozen-lockfile`로
+  고정되어 있다. 락파일 없이 의존성이 바뀌는 걸 막는다.
+- **Cloudflare** — Workers Builds(git 연동)는 `wrangler.jsonc`의 빌드 설정을 보지 않는다.
+  같은 걸 강제하려면 대시보드에서 직접: Settings > Build > Build Variables에
+  `SKIP_DEPENDENCY_INSTALL=1`을 추가하고, Build command를
+  `bun install --frozen-lockfile && bun run build`로 바꾼다.
 
 ## AI 코드리뷰
 

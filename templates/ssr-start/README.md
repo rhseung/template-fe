@@ -112,7 +112,11 @@ VITE_ENABLE_MSW=false
   [nitro 릴리스](https://github.com/nitrojs/nitro/releases)에서 정식 버전이 나왔는지
   확인해라. 이 템플릿이 네 개 중 마지막으로 만들어진 이유가 이 베타 의존성이다.
 
-`.github/workflows/deploy-*.yml`도 고른 쪽 하나만 남는다. 필요한 시크릿은 그 워크플로 상단에.
+배포는 각 플랫폼의 git 연동이 push마다 알아서 한다 — 별도 GHA 워크플로는 없다.
+Cloudflare Workers Builds(git 연동)는 `wrangler.jsonc`의 빌드 설정을 보지 않는다 — 락파일
+그대로 쓰게 하려면 대시보드에서 직접: Settings > Build > Build Variables에
+`SKIP_DEPENDENCY_INSTALL=1`을 추가하고, Build command를
+`bun install --frozen-lockfile && bun run build`로 바꾼다.
 
 ## AI 코드리뷰
 

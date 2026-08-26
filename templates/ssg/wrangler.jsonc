@@ -2,6 +2,11 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ssg",
   "compatibility_date": "2026-08-01",
+  // Workers Builds(git 연동)는 이 파일의 `build.command`를 무시한다 — 락파일을 그대로
+  // 쓰게 하려면 대시보드에서 직접: Settings > Build > Build Variables에
+  // SKIP_DEPENDENCY_INSTALL=1을 추가하고, Build command를
+  // "bun install --frozen-lockfile && bun run build"로 바꾼다.
+  //
   // Astro `output: 'static'` 빌드는 정적 파일일 뿐이다. Worker 스크립트도 `main`도 없다 —
   // Cloudflare가 `dist/`를 직접 서빙한다.
   "assets": {

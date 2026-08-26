@@ -3,6 +3,11 @@
   "name": "ssr-start",
   "compatibility_date": "2026-08-01",
   "compatibility_flags": ["nodejs_compat"],
+  // Workers Builds(git 연동)는 이 파일의 `build.command`를 무시한다 — 락파일을 그대로
+  // 쓰게 하려면 대시보드에서 직접: Settings > Build > Build Variables에
+  // SKIP_DEPENDENCY_INSTALL=1을 추가하고, Build command를
+  // "bun install --frozen-lockfile && bun run build"로 바꾼다.
+  //
   // TanStack Start의 기본 서버 엔트리. `src/server.ts`로 커스터마이즈하기 전엔 이 값 그대로.
   "main": "@tanstack/react-start/server-entry",
   "observability": { "enabled": true },
