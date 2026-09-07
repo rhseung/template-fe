@@ -1,9 +1,11 @@
 name: ci
 
+# 템플릿 레포라 push/PR에 자동으로 안 돈다 - 여기 CI는 제품 CI가 아니라
+# 템플릿 자체 검증(shared/ drift + 4 템플릿 x 2 타깃 빌드)이고, 몇 분씩 걸린 뒤
+# 실패 알림만 쌓인다. 검증이 필요할 때 Actions 탭에서 손으로 돌린다.
+# 생성된 레포에서 도는 CI는 shared/files/.github/workflows/ 쪽이다.
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
