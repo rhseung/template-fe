@@ -28,3 +28,6 @@ test-results
 blob-report
 .playwright-mcp
 coverage
+
+# review bot scratch
+.claude-review/
