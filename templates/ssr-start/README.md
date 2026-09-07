@@ -120,14 +120,25 @@ Cloudflare Workers Builds(git 연동)는 `wrangler.jsonc`의 빌드 설정을 �
 
 ## AI 코드리뷰
 
-아무것도 안 해도 되는 쪽부터: [CodeRabbit](https://github.com/marketplace/coderabbitai)
-GitHub App만 설치하면 끝난다. 공개 레포는 영구 무료고 설정 파일도 시크릿도 필요 없다.
-포크 PR까지 리뷰해준다.
+PR 리뷰를 Claude 에 맡긴다 ([claude-review-plugin](https://github.com/rhseung/claude-review-plugin)).
+PR 생성과 push 마다 `AGENTS.md` 의 규칙을 기준으로 변경분을 검토하고, 위반 지점에 인라인 코멘트를
+남긴다. 수정 후 push 하면 해결된 스레드를 닫고 새 변경분만 재검토하며, 남은 사항이 없으면
+approve 한다.
 
-Claude로 하고 싶으면 조금 더 손이 간다. `claude setup-token`으로 `CLAUDE_CODE_OAUTH_TOKEN`
-시크릿을 만들고 레포 변수에 `ENABLE_CLAUDE_REVIEW=true`를 추가하면 된다
-(`.github/workflows/review.yml` 참고).
+활성화:
 
-공짜로 하나 더 얹고 싶으면 Settings → Code security에서 CodeQL default setup만 켜면 된다.
+```sh
+open https://github.com/apps/claude/installations/new   # Claude GitHub App. 레포 선택. 한 번만
+claude setup-token                                      # 구독 OAuth 토큰(1년). Pro/Max/Team
+gh secret set CLAUDE_CODE_OAUTH_TOKEN                   # 위 토큰 붙여넣기
+gh variable set ENABLE_CLAUDE_REVIEW --body true
+```
 
-`react-doctor.yml`은 시크릿이 필요 없어서 애초에 켜져 있다.
+- 코멘트에는 스레드 답글로 응답한다. 타당하면 스레드를 닫는다.
+- 지시는 PR 코멘트에 `@claude` 멘션으로 한다. `@claude review` 는 push 없는 재검토.
+- 비활성화: `gh variable set ENABLE_CLAUDE_REVIEW --body false`.
+- 포크 PR 은 검토 대상에서 제외한다.
+- 토큰 만료 시 `claude setup-token` 과 `gh secret set` 을 재실행한다.
+
+`react-doctor.yml` 은 시크릿 없이 처음부터 켜져 있다. CodeQL 은 Settings → Code security 에서
+default setup 을 켠다.
