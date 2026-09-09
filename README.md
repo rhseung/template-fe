@@ -30,26 +30,21 @@ bunx degit rhseung/template-fe/templates/ssg       my-app
 
 ## 공통 기능
 
-- MVVM 구조를 lint로 강제합니다. `eslint-plugin-boundaries`가 View에서 Model로 직접
-  접근하는 것과 ViewModel이 View를 참조하는 것을 에러로 막습니다.
-- 디렉토리 구조는 `src/features/<name>/{models,viewmodels,views}` 와 root barrel이 없는
-  `src/common/`으로 구성됩니다.
-- 백엔드는 OpenAPI spec 하나만 있으면 연결됩니다. Hey API가 type, client, zod,
-  react-query hook을 한 번에 생성합니다.
-- i18n은 i18next-cli가 처리합니다. `t()` 호출에서 key를 추출하고 `src/@types`에 type까지
-  생성합니다. ko를 먼저 작성하고 en을 나중에 채웁니다.
-- UI는 shadcn/ui (`base-nova`, Base UI), Tailwind v4 CSS-first, Phosphor 아이콘으로
-  구성합니다.
-- Storybook story를 그대로 테스트로 사용합니다. theme과 locale toolbar decorator가 붙어
-  있고, vitest browser 프로젝트로 실행됩니다.
-- Playwright e2e와 MSW를 함께 제공합니다. 백엔드를 실행하지 않아도 `bun dev`가
-  정상적으로 동작합니다.
-- ESLint 설정은 엄격합니다. kebab-case, named export만 허용, barrel을 경유하는 import,
-  React Compiler rule까지 적용합니다.
-- lint, typecheck, test는 pre-commit hook (husky, `bun run verify`)이 커밋할 때마다
-  실행합니다. CI는 build, storybook, e2e만 담당하고, [react-doctor](https://react.doctor)
-  와 Claude (`review.yml`)가 PR을 리뷰합니다. 배포는 Cloudflare Pages와 Vercel의 git
-  연동이 처리하므로, 별도의 배포 워크플로는 없습니다.
+- MVVM 구조를 lint로 강제합니다. `eslint-plugin-boundaries`가 View에서 Model로 직접 접근하는 것과 ViewModel이 View를
+참조하는 것을 에러로 막습니다.
+- 디렉토리 구조는 `src/features/<name>/{models,viewmodels,views}` 와 root barrel이 없는 `src/common/`으로 구성됩니다.
+- 백엔드는 OpenAPI spec 하나만 있으면 연결됩니다. Hey API가 type, client, zod, react-query hook을 한 번에 생성합니다.
+- i18n은 i18next-cli가 처리합니다. `t()` 호출에서 key를 추출하고 `src/@types`에 type까지 생성합니다. ko를 먼저
+작성하고 en을 나중에 채웁니다.
+- UI는 shadcn/ui (`base-nova`, Base UI), Tailwind v4 CSS-first, Phosphor 아이콘으로 구성합니다.
+- Storybook story를 그대로 테스트로 사용합니다. theme과 locale toolbar decorator가 붙어 있고, vitest browser
+프로젝트로 실행됩니다.
+- Playwright e2e와 MSW를 함께 제공합니다. 백엔드를 실행하지 않아도 `bun dev`가 정상적으로 동작합니다.
+- ESLint 설정은 엄격합니다. kebab-case, named export만 허용, barrel을 경유하는 import, React Compiler rule까지
+  적용합니다.
+- lint, typecheck, test는 pre-commit hook (husky, `bun run verify`)이 커밋할 때마다 실행합니다. CI는 build,
+storybook, e2e만 담당하고, [react-doctor](https://react.doctor) 와 Claude (`review.yml`)가 PR을 리뷰합니다. 배포는
+Cloudflare Pages와 Vercel의 git 연동이 처리하므로, 별도의 배포 워크플로는 없습니다.
 - `AGENTS.md` 파일 하나를 Claude Code, Cursor, Copilot이 모두 읽습니다.
 
 ## 유지보수
